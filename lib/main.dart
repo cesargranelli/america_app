@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'src/user/ui/page/my_register_play1.dart';
+import 'src/admin/ui/page/register_league_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter App America',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+        appBarTheme: AppBarTheme(backgroundColor: Colors.lightGreen.shade300),
       ),
-      home: MyRegisterPlay1(),
+      home: RegisterLeaguePage(),
     );
   }
 }
