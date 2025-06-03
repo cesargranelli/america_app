@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'src/admin/ui/page/register_league_page.dart';
+import 'src/user/ui/page/my_app_teams_page9.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
         appBarTheme: AppBarTheme(backgroundColor: Colors.lightGreen.shade300),
       ),
-      home: RegisterLeaguePage(),
+      home: MyAppTeamsPage9(),
     );
   }
 }
