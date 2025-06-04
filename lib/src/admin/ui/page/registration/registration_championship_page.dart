@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class RegisterChampionshipPage extends StatelessWidget {
+class RegistrationChampionshipPage extends StatelessWidget {
+  const RegistrationChampionshipPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

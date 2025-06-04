@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'src/user/ui/page/my_app_teams_page9.dart';
+import 'src/admin/ui/page/admin_home_page.dart';
+import 'src/ui/core/themes/custom_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,11 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter App America',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
-        appBarTheme: AppBarTheme(backgroundColor: Colors.lightGreen.shade300),
-      ),
-      home: MyAppTeamsPage9(),
+      theme: customTheme(),
+      home: AdminHomePage(),
     );
   }
 }

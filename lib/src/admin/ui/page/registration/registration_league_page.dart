@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-class RegisterLeaguePage extends StatefulWidget {
-  const RegisterLeaguePage({super.key});
+class RegistrationLeaguePage extends StatefulWidget {
+  const RegistrationLeaguePage({super.key});
 
   @override
-  State<RegisterLeaguePage> createState() => _RegisterLeaguePageState();
+  State<RegistrationLeaguePage> createState() => _RegistrationLeaguePageState();
 }
 
-class _RegisterLeaguePageState extends State<RegisterLeaguePage> {
+class _RegistrationLeaguePageState extends State<RegistrationLeaguePage> {
   File? _selectedImage;
 
   Future<void> _pickImage() async {

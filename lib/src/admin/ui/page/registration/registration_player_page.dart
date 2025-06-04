@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterPlayerPage extends StatelessWidget {
-  const RegisterPlayerPage({super.key});
+class RegistrationPlayerPage extends StatelessWidget {
+  const RegistrationPlayerPage({super.key});
 
   @override
   Widget build(BuildContext context) {

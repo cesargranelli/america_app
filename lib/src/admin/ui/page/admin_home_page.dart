@@ -1,250 +1,182 @@
 import 'package:flutter/material.dart';
 
-class AdminHomePage extends StatelessWidget {
+import 'presentation/presentation_championship_page.dart';
+import 'presentation/presentation_conference_page.dart';
+import 'presentation/presentation_divisional_page.dart';
+import 'presentation/presentation_league_page.dart';
+import 'presentation/presentation_player_page.dart';
+import 'presentation/presentation_team_page.dart';
+
+class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Admin Home Menu M3',
-      theme: ThemeData(
-        useMaterial3: true, // Habilita o Material 3
-        primarySwatch: Colors.blue,
-        // Cor de fundo geral do Scaffold e do Drawer, como na imagem
-        scaffoldBackgroundColor: const Color(
-          0xFFFBF8EE,
-        ), // Cor creme/amarelada clara
-        // Tema de texto para combinar as cores da imagem
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            color: Color(0xFF4A4A4A),
-          ), // Cor padrão do texto
-          bodyLarge: TextStyle(color: Color(0xFF4A4A4A)),
-        ),
-      ),
-      home: AdminHomeScreenM3(),
-    );
-  }
+  State<AdminHomePage> createState() => _AdminHomePageState();
 }
 
-class AdminHomeScreenM3 extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class _AdminHomePageState extends State<AdminHomePage> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text(
-          'Admin Dashboard',
-          style: TextStyle(color: Color(0xFF4A4A4A)), // Cor do título
-        ),
-        backgroundColor:
-            Colors.transparent, // AppBar transparente para o Drawer
-        elevation: 0, // Remove a sombra
-        leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            color: Color(0xFF4A4A4A),
-          ), // Ícone de menu para abrir o Drawer
-          onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        title: const Text('Administrativo'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
-      drawer: AppDrawerM3(), // Nosso Drawer personalizado para Material 3
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Bem-vindo à página principal!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-              child: const Text('Abrir Menu'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AppDrawerM3 extends StatelessWidget {
-  const AppDrawerM3({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Cores extraídas da imagem para fidelidade
-    final Color drawerBackgroundColor = const Color(
-      0xFFFBF8EE,
-    ); // Fundo do Drawer
-    final Color textColor = const Color(0xFF4A4A4A); // Cor escura para o texto
-    final Color selectedItemBackgroundColor = const Color(
-      0xFFF4F0E6,
-    ); // Fundo do item "Home" selecionado
-    final Color selectedItemIconTextColor = const Color(
-      0xFF9E8747,
-    ); // Cor do ícone e texto "Home" selecionado
-
-    return Drawer(
-      backgroundColor: drawerBackgroundColor, // Define a cor de fundo do Drawer
-      width:
-          MediaQuery.of(context).size.width *
-          0.75, // Ajuste a largura do drawer se necessário
-      child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start, // Alinha o conteúdo à esquerda
+      drawer: NavigationDrawer(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          Navigator.pop(context); // Fecha o drawer após a seleção
+          // Aqui você pode adicionar a lógica de navegação para a tela correspondente
+          _navigateToScreen(context, index);
+        },
         children: <Widget>[
-          // Cabeçalho do Drawer com o nome do usuário
+          // Cabeçalho do Drawer (User Accounts)
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              20.0,
-              60.0,
-              20.0,
-              20.0,
-            ), // Padding conforme a imagem
-            child: Text(
-              'Sophia Carter', // Nome do usuário
-              style: TextStyle(
-                color: textColor, // Cor do texto
-                fontSize: 24.0, // Tamanho da fonte do nome
-                fontWeight: FontWeight.bold, // Negrito para o nome
-              ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 32.0,
             ),
-          ),
-          // Lista de opções do menu
-          Expanded(
-            // Expanded para as opções ocuparem o espaço restante
-            child: ListView(
-              padding: EdgeInsets.zero, // Remove o padding padrão do ListView
-              children: <Widget>[
-                // Item Home (selecionado)
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.home,
-                  text: 'Home',
-                  isSelected: true,
-                  backgroundColor: selectedItemBackgroundColor,
-                  iconColor: selectedItemIconTextColor,
-                  textColor: selectedItemIconTextColor,
-                  onTap: () {
-                    Navigator.pop(context); // Fecha o drawer
-                    // Ação para navegar para a Home
-                  },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.secondaryContainer,
+                  child: Icon(
+                    Icons.person,
+                    size: 30,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
                 ),
-                // Outros itens
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.calendar_today,
-                  text: 'My Events',
-                  onTap: () {
-                    Navigator.pop(context); // Fecha o drawer
-                    // Ação para navegar para Meus Eventos
-                  },
+                const SizedBox(height: 16),
+                Text(
+                  'Sophia Carter',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.people,
-                  text: 'My Teams',
-                  onTap: () {
-                    Navigator.pop(context); // Fecha o drawer
-                    // Ação para navegar para Meus Times
-                  },
-                ),
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.person,
-                  text: 'My Profile',
-                  onTap: () {
-                    Navigator.pop(context); // Fecha o drawer
-                    // Ação para navegar para Meu Perfil
-                  },
-                ),
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.settings,
-                  text: 'Settings',
-                  onTap: () {
-                    Navigator.pop(context); // Fecha o drawer
-                    // Ação para navegar para Configurações
-                  },
-                ),
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.help_outline,
-                  text: 'Help',
-                  onTap: () {
-                    Navigator.pop(context); // Fecha o drawer
-                    // Ação para navegar para Ajuda
-                  },
+                Text(
+                  'sophia.carter@example.com',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
           ),
+          const Divider(),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.sports_football_outlined),
+            selectedIcon: const Icon(Icons.sports_football),
+            label: const Text('Ligas'),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.emoji_events_outlined),
+            selectedIcon: const Icon(Icons.emoji_events),
+            label: const Text('Campeonatos'),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.account_tree_outlined),
+            selectedIcon: const Icon(Icons.account_tree),
+            label: const Text('Conferências'),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.view_list_outlined),
+            selectedIcon: const Icon(Icons.view_list),
+            label: const Text('Divisões'),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.shield_moon_outlined),
+            selectedIcon: const Icon(Icons.shield_moon),
+            label: const Text('Agremiações'),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.groups_outlined),
+            selectedIcon: const Icon(Icons.groups),
+            label: const Text('Atletas'),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 8.0),
+            child: Divider(),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings),
+            label: const Text('Configurações'),
+          ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.help_outline),
+            selectedIcon: const Icon(Icons.help),
+            label: const Text('Ajuda'),
+          ),
         ],
       ),
+      body: Center(child: _getPageContent(_selectedIndex)),
     );
   }
 
-  // Widget auxiliar para construir os itens do Drawer
-  Widget _buildDrawerItem(
-    BuildContext context, {
-    required IconData icon,
-    required String text,
-    required VoidCallback onTap,
-    bool isSelected = false,
-    Color? backgroundColor,
-    Color? iconColor,
-    Color? textColor,
-  }) {
-    // Cores padrão para itens não selecionados, extraídas da imagem
-    final Color defaultIconTextColor = const Color(0xFF4A4A4A);
+  // Função para navegar para a tela correspondente
+  void _navigateToScreen(BuildContext context, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => _getPageName(index)),
+    );
+  }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 4.0,
-        horizontal: 16.0,
-      ), // Padding ajustado conforme a imagem
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected
-              ? backgroundColor
-              : Colors.transparent, // Fundo transparente ou customizado
-          borderRadius: BorderRadius.circular(
-            12.0,
-          ), // Bordas arredondadas para o item selecionado
+  Widget _getPageName(int index) {
+    switch (index) {
+      case 0:
+        return PresentationLeaguePage();
+      case 1:
+        return PresentationChampionshipPage();
+      case 2:
+        return PresentationConferencePage();
+      case 3:
+        return PresentationDivisionalPage();
+      case 4:
+        return PresentationTeamPage();
+      case 5:
+        return PresentationPlayerPage();
+      default:
+        return PresentationLeaguePage();
+    }
+  }
+
+  Widget _getPageContent(int index) {
+    String pageName = PresentationLeaguePage().toString();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Você está em:',
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
-        child: ListTile(
-          leading: Icon(
-            icon,
-            color: isSelected
-                ? iconColor
-                : defaultIconTextColor, // Cor do ícone
-            size: 24.0, // Tamanho do ícone
+        Text(
+          pageName,
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
           ),
-          title: Text(
-            text,
-            style: TextStyle(
-              color: isSelected
-                  ? textColor
-                  : defaultIconTextColor, // Cor do texto
-              fontSize: 18.0, // Tamanho da fonte dos itens
-              fontWeight: isSelected
-                  ? FontWeight.w600
-                  : FontWeight.normal, // Negrito para item selecionado
-            ),
-          ),
-          onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 8.0,
-          ), // Padding interno do ListTile
         ),
-      ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Botão da página $pageName pressionado!')),
+            );
+          },
+          child: Text('Ação na página $pageName'),
+        ),
+      ],
     );
   }
 }

@@ -1,9 +1,11 @@
 import 'dart:io'; // Para o tipo File
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Importe o pacote para pegar imagens
+import 'package:image_picker/image_picker.dart';
 
-class TeamRegistrationPage extends StatelessWidget {
+class RegistrationTeamPage extends StatelessWidget {
+  const RegistrationTeamPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
