@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyLineTeamsPage6 extends StatelessWidget {
+  const MyLineTeamsPage6({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FootballTimelineScreenModern();
@@ -8,6 +10,8 @@ class MyLineTeamsPage6 extends StatelessWidget {
 }
 
 class FootballTimelineScreenModern extends StatefulWidget {
+  const FootballTimelineScreenModern({super.key});
+
   @override
   _FootballTimelineScreenModernState createState() =>
       _FootballTimelineScreenModernState();
@@ -154,7 +158,7 @@ class _FootballTimelineScreenModernState
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${team1Name} vs ${team2Name}',
+          '$team1Name vs $team2Name',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,

@@ -52,6 +52,8 @@ class RegistrationChampionshipPage extends StatelessWidget {
 }
 
 class ChampionshipRegistrationScreen extends StatefulWidget {
+  const ChampionshipRegistrationScreen({super.key});
+
   @override
   _ChampionshipRegistrationScreenState createState() =>
       _ChampionshipRegistrationScreenState();

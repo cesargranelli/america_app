@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyRegisterPlay1 extends StatelessWidget {
+  const MyRegisterPlay1({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GamePlayForm();
@@ -8,6 +10,8 @@ class MyRegisterPlay1 extends StatelessWidget {
 }
 
 class GamePlayForm extends StatefulWidget {
+  const GamePlayForm({super.key});
+
   @override
   _GamePlayFormState createState() => _GamePlayFormState();
 }

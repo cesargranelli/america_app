@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../viewmodel/league_viewmodel.dart';
 import 'presentation/presentation_championship_page.dart';
 import 'presentation/presentation_conference_page.dart';
 import 'presentation/presentation_divisional_page.dart';
@@ -20,23 +21,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Administrativo'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      ),
+      appBar: AppBar(title: const Text('Administrativo'), centerTitle: true),
       drawer: NavigationDrawer(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) {
           setState(() {
             _selectedIndex = index;
           });
-          Navigator.pop(context); // Fecha o drawer após a seleção
-          // Aqui você pode adicionar a lógica de navegação para a tela correspondente
-          _navigateToScreen(context, index);
+          Navigator.pop(context);
+          _navigateToPage(context, index);
         },
         children: <Widget>[
-          // Cabeçalho do Drawer (User Accounts)
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 24.0,
@@ -124,8 +119,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     );
   }
 
-  // Função para navegar para a tela correspondente
-  void _navigateToScreen(BuildContext context, int index) {
+  void _navigateToPage(BuildContext context, int index) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => _getPageName(index)),
@@ -135,7 +129,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   Widget _getPageName(int index) {
     switch (index) {
       case 0:
-        return PresentationLeaguePage();
+        return PresentationLeaguePage(viewModel: LeagueViewModel());
       case 1:
         return PresentationChampionshipPage();
       case 2:
@@ -147,12 +141,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
       case 5:
         return PresentationPlayerPage();
       default:
-        return PresentationLeaguePage();
+        return PresentationLeaguePage(viewModel: LeagueViewModel());
     }
   }
 
   Widget _getPageContent(int index) {
-    String pageName = PresentationLeaguePage().toString();
+    String pageName = PresentationLeaguePage(
+      viewModel: LeagueViewModel(),
+    ).toString().replaceAll("Presentation", "");
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

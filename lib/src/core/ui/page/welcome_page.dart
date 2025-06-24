@@ -1,7 +1,7 @@
 import 'package:america_app/src/user/ui/page/my_app_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../../admin/ui/page/admin_home_page.dart';
+import '../../../admin/ui/pages/admin_home_page.dart';
 
 class WelcomeSelectionPage extends StatelessWidget {
   const WelcomeSelectionPage({super.key});

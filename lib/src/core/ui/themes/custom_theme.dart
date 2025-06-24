@@ -4,15 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 ThemeData customTheme() {
   return ThemeData(useMaterial3: true).copyWith(
     textTheme: GoogleFonts.lexendTextTheme(),
-    //   colorScheme: ColorScheme.fromSeed(
-    //     seedColor: Colors.lightGreen,
-    //     primary: Colors.lightGreen.shade300,
-    //     secondary: Colors.lightGreen.shade200,
-    //     onPrimary: Colors.white,
-    //     onSecondary: Colors.black87,
-    //     surface: Colors.white,
-    //     onSurface: Colors.black87,
-    //   ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.lightGreen.shade300,
+      foregroundColor: Colors.white,
+    ),
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
     //   elevatedButtonTheme: ElevatedButtonThemeData(
     //     style: ElevatedButton.styleFrom(foregroundColor: Colors.white),
     //   ),
@@ -41,6 +37,5 @@ ThemeData customTheme() {
     //     ),
     //     titleSmall: GoogleFonts.lexend(fontSize: 16, fontWeight: FontWeight.bold),
     //   ),
-    //   appBarTheme: AppBarTheme(backgroundColor: Colors.lightGreen.shade300),
   );
 }

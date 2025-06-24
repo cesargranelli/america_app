@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyLineTeamsPage7 extends StatelessWidget {
+  const MyLineTeamsPage7({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GameTimelineScreen();
@@ -8,6 +10,8 @@ class MyLineTeamsPage7 extends StatelessWidget {
 }
 
 class GameTimelineScreen extends StatefulWidget {
+  const GameTimelineScreen({super.key});
+
   @override
   _GameTimelineScreenState createState() => _GameTimelineScreenState();
 }

@@ -71,6 +71,8 @@ class RegistrationPlayerPage extends StatelessWidget {
 // No exemplo, estou definindo 'Lexend' como fontFamily globalmente.
 
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
