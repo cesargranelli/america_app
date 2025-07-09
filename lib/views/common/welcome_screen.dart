@@ -1,10 +1,10 @@
 import 'package:america_app/src/user/ui/page/my_app_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../../admin/ui/pages/admin_home_page.dart';
+import '../../src/admin/ui/pages/admin_home_page.dart';
 
-class WelcomeSelectionPage extends StatelessWidget {
-  const WelcomeSelectionPage({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,10 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'src/admin/ui/pages/admin_home_page.dart';
+import 'firebase_options.dart';
 import 'src/core/ui/themes/america_theme.dart';
 import 'src/core/ui/themes/text_theme.dart';
+import 'views/common/home_screen.dart';
+import 'views/common/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const AmericaApp());
 }
 
@@ -24,8 +30,20 @@ class AmericaApp extends StatelessWidget {
       title: 'Flutter App America',
       theme: brightness == Brightness.light
           ? americaTheme.light().copyWith()
-          : americaTheme.dark(),
-      home: AdminHomePage(),
+          : americaTheme.dark().copyWith(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasData) {
+            return HomeScreen();
+          } else {
+            return LoginScreen();
+          }
+        },
+      ),
     );
   }
 }

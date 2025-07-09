@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "854096625101",
+    "project_id": "sevenine-america",
+    "storage_bucket": "sevenine-america.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854096625101:android:0265bbc27aca2717069884",
+        "android_client_info": {
+          "package_name": "com.example.america_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUKQbb00GFWr2VXYwo2-GxkhUq6v3o6Yo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
