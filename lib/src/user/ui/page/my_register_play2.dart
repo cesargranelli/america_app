@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyRegisterPlay2 extends StatelessWidget {
+  const MyRegisterPlay2({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GameTimelineScreenWithPopup();
@@ -8,6 +10,8 @@ class MyRegisterPlay2 extends StatelessWidget {
 }
 
 class GameTimelineScreenWithPopup extends StatefulWidget {
+  const GameTimelineScreenWithPopup({super.key});
+
   @override
   _GameTimelineScreenWithPopupState createState() =>
       _GameTimelineScreenWithPopupState();

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyLineTeamsPage1 extends StatelessWidget {
+  const MyLineTeamsPage1({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

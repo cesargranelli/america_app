@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 enum EventTeam { teamA, teamB }
 
 class MyAppTeamsPage9 extends StatelessWidget {
+  const MyAppTeamsPage9({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,6 +27,8 @@ class MyAppTeamsPage9 extends StatelessWidget {
 }
 
 class GameTimelineScreen extends StatefulWidget {
+  const GameTimelineScreen({super.key});
+
   @override
   _GameTimelineScreenState createState() => _GameTimelineScreenState();
 }
@@ -232,11 +236,11 @@ class TimelineTile extends StatelessWidget {
   final bool isLast;
 
   const TimelineTile({
-    Key? key,
+    super.key,
     required this.event,
     this.isFirst = false,
     this.isLast = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

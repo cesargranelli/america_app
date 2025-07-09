@@ -1,9 +1,11 @@
 import 'dart:io'; // Para o tipo File
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Importe o pacote para pegar imagens
+import 'package:image_picker/image_picker.dart';
 
-class TeamRegistrationPage extends StatelessWidget {
+class RegistrationTeamPage extends StatelessWidget {
+  const RegistrationTeamPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,22 +47,22 @@ class TeamRegistrationPage extends StatelessWidget {
           labelLarge: TextStyle(color: Color(0xFF4A4A4A)), // Cor dos rótulos
         ),
       ),
-      home: TeamRegistrationScreenWithLogo(),
+      home: TeamRegistrationPage(),
     );
   }
 }
 
-class TeamRegistrationScreenWithLogo extends StatefulWidget {
+class TeamRegistrationPage extends StatefulWidget {
+  const TeamRegistrationPage({super.key});
+
   @override
-  _TeamRegistrationScreenWithLogoState createState() =>
-      _TeamRegistrationScreenWithLogoState();
+  _TeamRegistrationPageState createState() => _TeamRegistrationPageState();
 }
 
-class _TeamRegistrationScreenWithLogoState
-    extends State<TeamRegistrationScreenWithLogo> {
-  TextEditingController _foundingDateController = TextEditingController();
+class _TeamRegistrationPageState extends State<TeamRegistrationPage> {
+  final TextEditingController _foundingDateController = TextEditingController();
   String? _selectedSportTypes;
-  File? _teamLogoImage; // Variável para armazenar a imagem do logotipo
+  File? _teamLogoImage;
 
   Future<void> _selectFoundingDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -72,15 +74,13 @@ class _TeamRegistrationScreenWithLogoState
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: const Color(0xFFFAC638), // Cor do seletor de data
+              primary: const Color(0xFFFAC638),
               onPrimary: Colors.white,
               onSurface: const Color(0xFF4A4A4A),
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: const Color(
-                  0xFF4A4A4A,
-                ), // Cor dos botões do seletor
+                foregroundColor: const Color(0xFF4A4A4A),
               ),
             ),
           ),
