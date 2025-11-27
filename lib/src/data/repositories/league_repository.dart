@@ -1,9 +1,10 @@
+import 'package:america_app/src/domain/models/league.dart';
+
 import '../../data/models/league_registration_model.dart';
 import '../../data/services/league_service.dart';
 
-// Interface para facilitar a injeção de dependência
 abstract class LeagueRepository {
-  Future<void> register(LeagueRegistrationModel league);
+  Future<League> register(LeagueRegistrationModel league);
 }
 
 class LeagueRepositoryImpl implements LeagueRepository {
@@ -13,8 +14,7 @@ class LeagueRepositoryImpl implements LeagueRepository {
     : _leagueService = leagueService;
 
   @override
-  Future<void> register(LeagueRegistrationModel league) async {
-    // A lógica aqui é simples, mas poderia incluir cache, por exemplo.
-    await _leagueService.register(league);
+  Future<League> register(LeagueRegistrationModel league) async {
+    return await _leagueService.register(league);
   }
 }

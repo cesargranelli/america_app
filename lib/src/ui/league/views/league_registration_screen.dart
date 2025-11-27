@@ -3,26 +3,23 @@ import 'package:provider/provider.dart';
 
 import '../view_models/league_registration_view_model.dart';
 
-// A tela agora é um StatelessWidget, pois o estado é gerenciado pelo ViewModel.
-// Se precisar de animações ou outros controllers de UI complexos, pode-se
-// convertê-la para um StatefulWidget e usar um `Consumer` no método `build`.
 class LeagueRegistrationScreen extends StatelessWidget {
-  // A tela recebe o ViewModel via construtor, facilitando a injeção de dependência.
-  final LeagueRegistrationViewModel viewModel;
+  final LeagueRegistrationViewModel? viewModel;
 
-  const LeagueRegistrationScreen({super.key, required this.viewModel});
+  const LeagueRegistrationScreen({super.key, this.viewModel});
 
   @override
   Widget build(BuildContext context) {
-    // Usamos o ChangeNotifierProvider para disponibilizar o viewModel para a árvore de widgets.
-    return ChangeNotifierProvider.value(
-      value: viewModel,
-      child: const _LeagueRegistrationView(),
-    );
+    if (viewModel != null) {
+      return ChangeNotifierProvider.value(
+        value: viewModel!,
+        child: const _LeagueRegistrationView(),
+      );
+    }
+    return const _LeagueRegistrationView();
   }
 }
 
-// Widget interno que consome o ViewModel para construir a UI.
 class _LeagueRegistrationView extends StatefulWidget {
   const _LeagueRegistrationView();
 
@@ -32,7 +29,6 @@ class _LeagueRegistrationView extends StatefulWidget {
 }
 
 class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
-  // Controllers permanecem aqui, pois controlam o estado local dos campos de texto da UI.
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _acronymCtrl = TextEditingController();
   final TextEditingController _foundationDateCrtl = TextEditingController();
@@ -40,8 +36,6 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
   @override
   void initState() {
     super.initState();
-    // Adicionamos um listener para reagir a estados de sucesso ou erro.
-    // O 'context' aqui é seguro de usar pois initState já completou.
     final viewModel = context.read<LeagueRegistrationViewModel>();
     viewModel.addListener(_onViewModelStateChanged);
   }
@@ -54,8 +48,6 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Liga registrada com sucesso!')),
       );
-      // Opcional: navegar para outra tela após o sucesso
-      // Navigator.of(context).pop();
     } else if (state == LeagueRegistrationState.error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -70,7 +62,6 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
 
   @override
   void dispose() {
-    // Limpeza dos listeners e controllers para evitar memory leaks.
     context.read<LeagueRegistrationViewModel>().removeListener(
       _onViewModelStateChanged,
     );
@@ -105,7 +96,6 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
       },
     );
     if (picked != null) {
-      // O setState aqui é apropriado, pois atualiza um estado local da UI (o texto do controller).
       setState(() {
         _foundationDateCrtl.text =
             "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
@@ -115,7 +105,6 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
 
   @override
   Widget build(BuildContext context) {
-    // Usamos um Consumer para reconstruir o botão quando o estado de 'loading' mudar.
     return Consumer<LeagueRegistrationViewModel>(
       builder: (context, viewModel, child) {
         final isLoading = viewModel.state == LeagueRegistrationState.loading;
@@ -180,9 +169,8 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
             padding: const EdgeInsets.all(20.0),
             child: ElevatedButton(
               onPressed: isLoading
-                  ? null // Desabilita o botão durante o carregamento
+                  ? null
                   : () {
-                      // A única responsabilidade do botão é chamar o método do ViewModel.
                       viewModel.registerLeague(
                         name: _nameCtrl.text,
                         acronym: _acronymCtrl.text,
@@ -201,7 +189,6 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // Mostra um indicador de progresso ou o texto, dependendo do estado.
               child: isLoading
                   ? const CircularProgressIndicator(color: Color(0xFF4A4A4A))
                   : const Text('Registrar'),

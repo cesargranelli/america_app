@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 class Organization {
-  Long id;
+  int id;
   String name;
   String description;
   String code;
@@ -16,4 +14,15 @@ class Organization {
     required this.createdDate,
     required this.updatedDate,
   });
+
+  factory Organization.fromJson(Map<String, dynamic> json) {
+    return Organization(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      code: json['code'],
+      createdDate: DateTime.parse(json['createdDate']),
+      updatedDate: DateTime.parse(json['updatedDate']),
+    );
+  }
 }

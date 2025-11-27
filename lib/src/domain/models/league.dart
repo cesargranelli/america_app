@@ -1,16 +1,14 @@
-import 'dart:ffi';
-
 import 'organization.dart';
 
 class League {
-  Long id;
-  String name;
-  String acronym;
-  String code;
-  Organization organization;
-  DateTime foundationDate;
-  DateTime createdDate;
-  DateTime updatedDate;
+  final int id;
+  final String name;
+  final String acronym;
+  final String code;
+  final Organization organization;
+  final DateTime foundationDate;
+  final DateTime createdDate;
+  final DateTime updatedDate;
 
   League({
     required this.id,
@@ -22,4 +20,19 @@ class League {
     required this.createdDate,
     required this.updatedDate,
   });
+
+  factory League.fromJson(Map<String, dynamic> json) {
+    return League(
+      id: json['id'],
+      name: json['name'],
+      acronym: json['acronym'],
+      code: json['code'],
+
+      organization: Organization.fromJson(json['organization']),
+
+      foundationDate: DateTime.parse(json['foundationDate']),
+      createdDate: DateTime.parse(json['createdDate']),
+      updatedDate: DateTime.parse(json['updatedDate']),
+    );
+  }
 }
