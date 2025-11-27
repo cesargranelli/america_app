@@ -12,9 +12,9 @@ class GameManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GameManagementViewModel(
-        playRepository: context.read(),
-      )..loadPlays(gameId),
+      create: (context) =>
+          GameManagementViewModel(playRepository: context.read())
+            ..loadPlays(gameId),
       child: _GameManagementView(gameId: gameId),
     );
   }
@@ -62,7 +62,8 @@ class _GameManagementViewState extends State<_GameManagementView> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GameTimelineScreen(gameId: widget.gameId),
+                  builder: (context) =>
+                      GameTimelineScreen(gameId: widget.gameId),
                 ),
               );
             },
@@ -90,12 +91,16 @@ class _GameManagementViewState extends State<_GameManagementView> {
                   child: Column(
                     children: [
                       DropdownButtonFormField<PlayType>(
-                        value: _selectedType,
-                        decoration: const InputDecoration(labelText: 'Tipo de Jogada'),
+                        initialValue: _selectedType,
+                        decoration: const InputDecoration(
+                          labelText: 'Tipo de Jogada',
+                        ),
                         items: PlayType.values.map((type) {
                           return DropdownMenuItem(
                             value: type,
-                            child: Text(type.toString().split('.').last.toUpperCase()),
+                            child: Text(
+                              type.toString().split('.').last.toUpperCase(),
+                            ),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -107,16 +112,21 @@ class _GameManagementViewState extends State<_GameManagementView> {
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _descriptionCtrl,
-                        decoration: const InputDecoration(labelText: 'Descrição'),
-                        validator: (value) => value!.isEmpty ? 'Campo obrigatório' : null,
+                        decoration: const InputDecoration(
+                          labelText: 'Descrição',
+                        ),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Campo obrigatório' : null,
                       ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
                           Expanded(
                             child: DropdownButtonFormField<int>(
-                              value: _quarter,
-                              decoration: const InputDecoration(labelText: 'Quarto'),
+                              initialValue: _quarter,
+                              decoration: const InputDecoration(
+                                labelText: 'Quarto',
+                              ),
                               items: [1, 2, 3, 4].map((q) {
                                 return DropdownMenuItem(
                                   value: q,
@@ -134,7 +144,9 @@ class _GameManagementViewState extends State<_GameManagementView> {
                           Expanded(
                             child: TextFormField(
                               controller: _timeCtrl,
-                              decoration: const InputDecoration(labelText: 'Tempo (MM:SS)'),
+                              decoration: const InputDecoration(
+                                labelText: 'Tempo (MM:SS)',
+                              ),
                               keyboardType: TextInputType.datetime,
                             ),
                           ),
@@ -145,8 +157,10 @@ class _GameManagementViewState extends State<_GameManagementView> {
                         children: [
                           Expanded(
                             child: DropdownButtonFormField<int>(
-                              value: _down,
-                              decoration: const InputDecoration(labelText: 'Descida (Down)'),
+                              initialValue: _down,
+                              decoration: const InputDecoration(
+                                labelText: 'Descida (Down)',
+                              ),
                               items: [1, 2, 3, 4].map((d) {
                                 return DropdownMenuItem(
                                   value: d,
@@ -164,7 +178,9 @@ class _GameManagementViewState extends State<_GameManagementView> {
                           Expanded(
                             child: TextFormField(
                               controller: _yardsToGoCtrl,
-                              decoration: const InputDecoration(labelText: 'Jardas para Avançar'),
+                              decoration: const InputDecoration(
+                                labelText: 'Jardas para Avançar',
+                              ),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -173,7 +189,9 @@ class _GameManagementViewState extends State<_GameManagementView> {
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _yardLineCtrl,
-                        decoration: const InputDecoration(labelText: 'Linha de Jardas (0-100)'),
+                        decoration: const InputDecoration(
+                          labelText: 'Linha de Jardas (0-100)',
+                        ),
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 20),
@@ -187,7 +205,8 @@ class _GameManagementViewState extends State<_GameManagementView> {
                               quarter: _quarter,
                               time: _timeCtrl.text,
                               down: _down,
-                              yardsToGo: int.tryParse(_yardsToGoCtrl.text) ?? 10,
+                              yardsToGo:
+                                  int.tryParse(_yardsToGoCtrl.text) ?? 10,
                               yardLine: int.tryParse(_yardLineCtrl.text) ?? 20,
                             );
                             _descriptionCtrl.clear();
@@ -217,11 +236,13 @@ class _GameManagementViewState extends State<_GameManagementView> {
                     final play = viewModel.recentPlays[index];
                     return Card(
                       child: ListTile(
-                        leading: CircleAvatar(
-                          child: Text('${play.quarter}Q'),
+                        leading: CircleAvatar(child: Text('${play.quarter}Q')),
+                        title: Text(
+                          play.type.toString().split('.').last.toUpperCase(),
                         ),
-                        title: Text(play.type.toString().split('.').last.toUpperCase()),
-                        subtitle: Text('${play.description}\n${play.time} - ${play.down}ª & ${play.yardsToGo}'),
+                        subtitle: Text(
+                          '${play.description}\n${play.time} - ${play.down}ª & ${play.yardsToGo}',
+                        ),
                         isThreeLine: true,
                       ),
                     );

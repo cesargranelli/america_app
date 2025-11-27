@@ -36,8 +36,7 @@ class _AthleteRegistrationView extends StatefulWidget {
       _AthleteRegistrationViewState();
 }
 
-class _AthleteRegistrationViewState
-    extends State<_AthleteRegistrationView> {
+class _AthleteRegistrationViewState extends State<_AthleteRegistrationView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _positionCtrl = TextEditingController();
@@ -69,19 +68,22 @@ class _AthleteRegistrationViewState
   Widget build(BuildContext context) {
     return Consumer<AthleteRegistrationViewModel>(
       builder: (context, viewModel, child) {
-        final isLoading =
-            viewModel.state == AthleteRegistrationState.loading;
+        final isLoading = viewModel.state == AthleteRegistrationState.loading;
         final isEditing = widget.athleteToEdit != null;
 
         if (viewModel.state == AthleteRegistrationState.success) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(isEditing ? 'Atleta atualizado!' : 'Atleta registrado!')),
+              SnackBar(
+                content: Text(
+                  isEditing ? 'Atleta atualizado!' : 'Atleta registrado!',
+                ),
+              ),
             );
             Navigator.of(context).pop();
           });
         } else if (viewModel.state == AthleteRegistrationState.error) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(viewModel.errorMessage ?? 'Erro desconhecido'),
@@ -129,7 +131,7 @@ class _AthleteRegistrationViewState
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
                       decoration: const InputDecoration(labelText: 'Time'),
-                      value: _selectedTeamId,
+                      initialValue: _selectedTeamId,
                       items: viewModel.teams.map((team) {
                         return DropdownMenuItem(
                           value: team.id,

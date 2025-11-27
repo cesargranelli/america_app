@@ -7,11 +7,7 @@ class TeamRegistrationScreen extends StatelessWidget {
   final TeamRegistrationViewModel? viewModel;
   final Team? teamToEdit;
 
-  const TeamRegistrationScreen({
-    super.key,
-    this.viewModel,
-    this.teamToEdit,
-  });
+  const TeamRegistrationScreen({super.key, this.viewModel, this.teamToEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +28,10 @@ class _TeamRegistrationView extends StatefulWidget {
   const _TeamRegistrationView({this.teamToEdit});
 
   @override
-  State<_TeamRegistrationView> createState() =>
-      _TeamRegistrationViewState();
+  State<_TeamRegistrationView> createState() => _TeamRegistrationViewState();
 }
 
-class _TeamRegistrationViewState
-    extends State<_TeamRegistrationView> {
+class _TeamRegistrationViewState extends State<_TeamRegistrationView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _cityCtrl = TextEditingController();
@@ -69,19 +63,22 @@ class _TeamRegistrationViewState
   Widget build(BuildContext context) {
     return Consumer<TeamRegistrationViewModel>(
       builder: (context, viewModel, child) {
-        final isLoading =
-            viewModel.state == TeamRegistrationState.loading;
+        final isLoading = viewModel.state == TeamRegistrationState.loading;
         final isEditing = widget.teamToEdit != null;
 
         if (viewModel.state == TeamRegistrationState.success) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(isEditing ? 'Time atualizado!' : 'Time registrado!')),
+              SnackBar(
+                content: Text(
+                  isEditing ? 'Time atualizado!' : 'Time registrado!',
+                ),
+              ),
             );
             Navigator.of(context).pop();
           });
         } else if (viewModel.state == TeamRegistrationState.error) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(viewModel.errorMessage ?? 'Erro desconhecido'),
@@ -129,7 +126,7 @@ class _TeamRegistrationViewState
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
                       decoration: const InputDecoration(labelText: 'Divisão'),
-                      value: _selectedDivisionId,
+                      initialValue: _selectedDivisionId,
                       items: viewModel.divisions.map((division) {
                         return DropdownMenuItem(
                           value: division.id,

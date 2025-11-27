@@ -36,8 +36,7 @@ class _DivisionRegistrationView extends StatefulWidget {
       _DivisionRegistrationViewState();
 }
 
-class _DivisionRegistrationViewState
-    extends State<_DivisionRegistrationView> {
+class _DivisionRegistrationViewState extends State<_DivisionRegistrationView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameCtrl = TextEditingController();
   String? _selectedConferenceId;
@@ -66,19 +65,22 @@ class _DivisionRegistrationViewState
   Widget build(BuildContext context) {
     return Consumer<DivisionRegistrationViewModel>(
       builder: (context, viewModel, child) {
-        final isLoading =
-            viewModel.state == DivisionRegistrationState.loading;
+        final isLoading = viewModel.state == DivisionRegistrationState.loading;
         final isEditing = widget.divisionToEdit != null;
 
         if (viewModel.state == DivisionRegistrationState.success) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(isEditing ? 'Divisão atualizada!' : 'Divisão registrada!')),
+              SnackBar(
+                content: Text(
+                  isEditing ? 'Divisão atualizada!' : 'Divisão registrada!',
+                ),
+              ),
             );
             Navigator.of(context).pop();
           });
         } else if (viewModel.state == DivisionRegistrationState.error) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(viewModel.errorMessage ?? 'Erro desconhecido'),
@@ -113,8 +115,10 @@ class _DivisionRegistrationViewState
                     ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: 'Conferência'),
-                      value: _selectedConferenceId,
+                      decoration: const InputDecoration(
+                        labelText: 'Conferência',
+                      ),
+                      initialValue: _selectedConferenceId,
                       items: viewModel.conferences.map((conference) {
                         return DropdownMenuItem(
                           value: conference.id,

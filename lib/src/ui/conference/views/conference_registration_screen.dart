@@ -71,14 +71,20 @@ class _ConferenceRegistrationViewState
         final isEditing = widget.conferenceToEdit != null;
 
         if (viewModel.state == ConferenceRegistrationState.success) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(isEditing ? 'Conferência atualizada!' : 'Conferência registrada!')),
+              SnackBar(
+                content: Text(
+                  isEditing
+                      ? 'Conferência atualizada!'
+                      : 'Conferência registrada!',
+                ),
+              ),
             );
             Navigator.of(context).pop();
           });
         } else if (viewModel.state == ConferenceRegistrationState.error) {
-           WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(viewModel.errorMessage ?? 'Erro desconhecido'),
@@ -90,7 +96,9 @@ class _ConferenceRegistrationViewState
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(isEditing ? 'Editar Conferência' : 'Cadastro de Conferência'),
+            title: Text(
+              isEditing ? 'Editar Conferência' : 'Cadastro de Conferência',
+            ),
             centerTitle: true,
           ),
           body: Padding(
@@ -113,8 +121,10 @@ class _ConferenceRegistrationViewState
                     ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: 'Campeonato'),
-                      value: _selectedChampionshipId,
+                      decoration: const InputDecoration(
+                        labelText: 'Campeonato',
+                      ),
+                      initialValue: _selectedChampionshipId,
                       items: viewModel.championships.map((championship) {
                         return DropdownMenuItem(
                           value: championship.id,
