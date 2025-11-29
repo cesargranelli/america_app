@@ -1,6 +1,6 @@
 import '../../domain/models/team.dart';
 import '../services/team_service.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class TeamRepository {
   Future<Team> registerTeam(Team team);

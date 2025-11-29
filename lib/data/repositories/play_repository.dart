@@ -1,6 +1,6 @@
 import '../../domain/models/play.dart';
 import '../services/play_service.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class PlayRepository {
   Future<Play> registerPlay(Play play);

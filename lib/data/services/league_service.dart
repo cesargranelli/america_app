@@ -1,8 +1,8 @@
-import 'package:america_app/domain/models/league.dart';
 import 'package:dio/dio.dart';
 
-import '../../core/exceptions/repository_exception.dart';
-import '../models/league_registration_model.dart';
+import '../../domain/models/league.dart';
+import '../../domain/models/league_registration_model.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class LeagueService {
   Future<League> register(LeagueRegistrationModel league);

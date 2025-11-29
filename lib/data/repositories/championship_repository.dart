@@ -1,6 +1,6 @@
 import '../../domain/models/championship.dart';
 import '../services/championship_service.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class ChampionshipRepository {
   Future<Championship> registerChampionship(Championship championship);

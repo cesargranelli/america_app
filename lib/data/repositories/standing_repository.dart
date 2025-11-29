@@ -1,6 +1,6 @@
 import '../../domain/models/standing.dart';
 import '../services/standing_service.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class StandingRepository {
   Future<List<Standing>> getStandings(String championshipId);

@@ -1,6 +1,5 @@
-import 'package:america_app/domain/models/league.dart';
-
-import '../models/league_registration_model.dart';
+import '../../domain/models/league.dart';
+import '../../domain/models/league_registration_model.dart';
 import '../services/league_service.dart';
 
 abstract class LeagueRepository {

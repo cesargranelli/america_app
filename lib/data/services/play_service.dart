@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../domain/models/play.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class PlayService {
   Future<Play> register(Play play);

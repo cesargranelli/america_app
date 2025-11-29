@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../domain/models/conference.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class ConferenceService {
   Future<Conference> register(Conference conference);

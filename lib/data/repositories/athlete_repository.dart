@@ -1,6 +1,6 @@
 import '../../domain/models/athlete.dart';
 import '../services/athlete_service.dart';
-import '../../core/exceptions/repository_exception.dart';
+import '../../ui/core/exceptions/repository_exception.dart';
 
 abstract class AthleteRepository {
   Future<Athlete> registerAthlete(Athlete athlete);

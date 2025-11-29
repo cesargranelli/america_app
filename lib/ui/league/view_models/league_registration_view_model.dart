@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/league_registration_model.dart';
 import '../../../data/repositories/league_repository.dart';
+import '../../../domain/models/league_registration_model.dart';
 
 enum LeagueRegistrationState { initial, loading, success, error }
 
