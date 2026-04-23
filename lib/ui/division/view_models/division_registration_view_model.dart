@@ -3,6 +3,7 @@ import '../../../data/repositories/division_repository.dart';
 import '../../../data/repositories/conference_repository.dart';
 import '../../../domain/models/division.dart';
 import '../../../domain/models/conference.dart';
+import '../../core/utils/app_logger.dart';
 
 enum DivisionRegistrationState { initial, loading, success, error }
 
@@ -30,7 +31,7 @@ class DivisionRegistrationViewModel extends ChangeNotifier {
       _conferences = await _conferenceRepository.getAllConferences();
       notifyListeners();
     } catch (e) {
-      print('Erro ao carregar conferências: $e');
+      AppLogger.error('Erro ao carregar conferências', error: e);
     }
   }
 

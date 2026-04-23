@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/theme/app_theme.dart';
 import '../view_models/game_timeline_view_model.dart';
 
 class GameTimelineScreen extends StatelessWidget {
@@ -10,9 +11,9 @@ class GameTimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GameTimelineViewModel(
-        playRepository: context.read(),
-      )..loadPlays(gameId),
+      create: (context) =>
+          GameTimelineViewModel(playRepository: context.read())
+            ..loadPlays(gameId),
       child: _GameTimelineView(gameId: gameId),
     );
   }
@@ -44,7 +45,9 @@ class _GameTimelineView extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (viewModel.state == GameTimelineState.error) {
             return Center(
-              child: Text(viewModel.errorMessage ?? 'Erro ao carregar timeline'),
+              child: Text(
+                viewModel.errorMessage ?? 'Erro ao carregar timeline',
+              ),
             );
           } else if (viewModel.plays.isEmpty) {
             return const Center(child: Text('Nenhuma jogada registrada.'));
@@ -58,10 +61,10 @@ class _GameTimelineView extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: const Color(0xFFFAC638),
+                    backgroundColor: AppColors.primary,
                     child: Text(
                       '${play.quarter}Q',
-                      style: const TextStyle(color: Color(0xFF4A4A4A)),
+                      style: const TextStyle(color: AppColors.onPrimary),
                     ),
                   ),
                   title: Text(

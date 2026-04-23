@@ -165,11 +165,7 @@ class _ConferenceRegistrationViewState
                                 }
                               }
                             },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: const Color(0xFFFAC638),
-                        foregroundColor: const Color(0xFF4A4A4A),
-                      ),
+                      style: ElevatedButton.styleFrom(),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : Text(isEditing ? 'Atualizar' : 'Registrar'),

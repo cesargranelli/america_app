@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_theme.dart';
 import '../view_models/league_registration_view_model.dart';
 
 class LeagueRegistrationScreen extends StatelessWidget {
@@ -81,14 +82,12 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: const Color(0xFFFAC638),
+              primary: AppColors.primary,
               onPrimary: Colors.white,
-              onSurface: const Color(0xFF4A4A4A),
+              onSurface: AppColors.onSurface,
             ),
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFF4A4A4A),
-              ),
+              style: TextButton.styleFrom(foregroundColor: AppColors.onSurface),
             ),
           ),
           child: child!,
@@ -149,7 +148,7 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
                       suffixIcon: IconButton(
                         icon: const Icon(
                           Icons.calendar_today,
-                          color: Color(0xFF9E8747),
+                          color: AppColors.accent,
                         ),
                         onPressed: isLoading
                             ? null
@@ -177,18 +176,7 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
                         foundationDate: _foundationDateCrtl.text,
                       );
                     },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFAC638),
-                foregroundColor: const Color(0xFF4A4A4A),
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.0),
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              style: ElevatedButton.styleFrom(),
               child: isLoading
                   ? const CircularProgressIndicator(color: Color(0xFF4A4A4A))
                   : const Text('Registrar'),

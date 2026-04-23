@@ -3,6 +3,7 @@ import '../../../data/repositories/team_repository.dart';
 import '../../../data/repositories/division_repository.dart';
 import '../../../domain/models/team.dart';
 import '../../../domain/models/division.dart';
+import '../../core/utils/app_logger.dart';
 
 enum TeamRegistrationState { initial, loading, success, error }
 
@@ -30,7 +31,7 @@ class TeamRegistrationViewModel extends ChangeNotifier {
       _divisions = await _divisionRepository.getAllDivisions();
       notifyListeners();
     } catch (e) {
-      print('Erro ao carregar divisões: $e');
+      AppLogger.error('Erro ao carregar divisões', error: e);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/models/division.dart';
 import '../view_models/division_list_view_model.dart';
 import 'division_registration_screen.dart';
 
@@ -19,24 +20,26 @@ class _DivisionListScreenState extends State<DivisionListScreen> {
     });
   }
 
+  void _navigateToRegistration({Division? division}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            DivisionRegistrationScreen(divisionToEdit: division),
+      ),
+    ).then((_) {
+      if (mounted) {
+        context.read<DivisionListViewModel>().loadDivisions();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Divisões'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Divisões')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DivisionRegistrationScreen(),
-            ),
-          ).then((_) {
-            context.read<DivisionListViewModel>().loadDivisions();
-          });
-        },
+        onPressed: () => _navigateToRegistration(),
         child: const Icon(Icons.add),
       ),
       body: Consumer<DivisionListViewModel>(
@@ -45,7 +48,9 @@ class _DivisionListScreenState extends State<DivisionListScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (viewModel.state == DivisionListState.error) {
             return Center(
-              child: Text(viewModel.errorMessage ?? 'Erro ao carregar divisões'),
+              child: Text(
+                viewModel.errorMessage ?? 'Erro ao carregar divisões',
+              ),
             );
           } else if (viewModel.divisions.isEmpty) {
             return const Center(child: Text('Nenhuma divisão cadastrada.'));
@@ -61,44 +66,13 @@ class _DivisionListScreenState extends State<DivisionListScreen> {
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DivisionRegistrationScreen(
-                            divisionToEdit: division,
-                          ),
-                        ),
-                      ).then((_) {
-                        context.read<DivisionListViewModel>().loadDivisions();
-                      });
+                      _navigateToRegistration(division: division);
                     } else if (value == 'delete') {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Confirmar exclusão'),
-                          content: const Text('Deseja realmente excluir esta divisão?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancelar'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<DivisionListViewModel>().deleteDivision(division.id);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Excluir'),
-                            ),
-                          ],
-                        ),
-                      );
+                      _showDeleteDialog(context, viewModel, division.id);
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar'),
-                    ),
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('Excluir'),
@@ -109,6 +83,33 @@ class _DivisionListScreenState extends State<DivisionListScreen> {
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+    BuildContext context,
+    DivisionListViewModel viewModel,
+    String id,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Deseja realmente excluir esta divisão?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              viewModel.deleteDivision(id);
+              Navigator.pop(dialogContext);
+            },
+            child: const Text('Excluir'),
+          ),
+        ],
       ),
     );
   }

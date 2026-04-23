@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/models/championship.dart';
 import '../view_models/championship_list_view_model.dart';
 import 'championship_registration_screen.dart';
 
@@ -19,24 +20,26 @@ class _ChampionshipListScreenState extends State<ChampionshipListScreen> {
     });
   }
 
+  void _navigateToRegistration({Championship? championship}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ChampionshipRegistrationScreen(championshipToEdit: championship),
+      ),
+    ).then((_) {
+      if (mounted) {
+        context.read<ChampionshipListViewModel>().loadChampionships();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Campeonatos'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Campeonatos')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ChampionshipRegistrationScreen(),
-            ),
-          ).then((_) {
-            context.read<ChampionshipListViewModel>().loadChampionships();
-          });
-        },
+        onPressed: () => _navigateToRegistration(),
         child: const Icon(Icons.add),
       ),
       body: Consumer<ChampionshipListViewModel>(
@@ -45,7 +48,9 @@ class _ChampionshipListScreenState extends State<ChampionshipListScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (viewModel.state == ChampionshipListState.error) {
             return Center(
-              child: Text(viewModel.errorMessage ?? 'Erro ao carregar campeonatos'),
+              child: Text(
+                viewModel.errorMessage ?? 'Erro ao carregar campeonatos',
+              ),
             );
           } else if (viewModel.championships.isEmpty) {
             return const Center(child: Text('Nenhum campeonato cadastrado.'));
@@ -57,50 +62,19 @@ class _ChampionshipListScreenState extends State<ChampionshipListScreen> {
               final championship = viewModel.championships[index];
               return ListTile(
                 title: Text(championship.name),
-                subtitle: Text('${championship.season} - ${championship.startDate} a ${championship.endDate}'),
+                subtitle: Text(
+                  '${championship.season} - ${championship.startDate} a ${championship.endDate}',
+                ),
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      // Navigate to edit screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChampionshipRegistrationScreen(
-                            championshipToEdit: championship,
-                          ),
-                        ),
-                      ).then((_) {
-                        context.read<ChampionshipListViewModel>().loadChampionships();
-                      });
+                      _navigateToRegistration(championship: championship);
                     } else if (value == 'delete') {
-                      // Confirm delete
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Confirmar exclusão'),
-                          content: const Text('Deseja realmente excluir este campeonato?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancelar'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ChampionshipListViewModel>().deleteChampionship(championship.id);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Excluir'),
-                            ),
-                          ],
-                        ),
-                      );
+                      _showDeleteDialog(context, viewModel, championship.id);
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar'),
-                    ),
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('Excluir'),
@@ -111,6 +85,33 @@ class _ChampionshipListScreenState extends State<ChampionshipListScreen> {
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+    BuildContext context,
+    ChampionshipListViewModel viewModel,
+    String id,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Deseja realmente excluir este campeonato?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              viewModel.deleteChampionship(id);
+              Navigator.pop(dialogContext);
+            },
+            child: const Text('Excluir'),
+          ),
+        ],
       ),
     );
   }

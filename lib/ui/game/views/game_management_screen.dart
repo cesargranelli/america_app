@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/play.dart';
 import '../view_models/game_management_view_model.dart';
-import 'game_timeline_screen.dart';
 
 class GameManagementScreen extends StatelessWidget {
   final String gameId;
@@ -59,13 +59,7 @@ class _GameManagementViewState extends State<_GameManagementView> {
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      GameTimelineScreen(gameId: widget.gameId),
-                ),
-              );
+              context.push('/games/${widget.gameId}/timeline');
             },
           ),
         ],
@@ -212,11 +206,7 @@ class _GameManagementViewState extends State<_GameManagementView> {
                             _descriptionCtrl.clear();
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 50),
-                          backgroundColor: const Color(0xFFFAC638),
-                          foregroundColor: const Color(0xFF4A4A4A),
-                        ),
+                        style: ElevatedButton.styleFrom(),
                         child: const Text('Registrar Jogada'),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/models/conference.dart';
 import '../view_models/conference_list_view_model.dart';
 import 'conference_registration_screen.dart';
 
@@ -19,24 +20,26 @@ class _ConferenceListScreenState extends State<ConferenceListScreen> {
     });
   }
 
+  void _navigateToRegistration({Conference? conference}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ConferenceRegistrationScreen(conferenceToEdit: conference),
+      ),
+    ).then((_) {
+      if (mounted) {
+        context.read<ConferenceListViewModel>().loadConferences();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Conferências'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Conferências')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ConferenceRegistrationScreen(),
-            ),
-          ).then((_) {
-            context.read<ConferenceListViewModel>().loadConferences();
-          });
-        },
+        onPressed: () => _navigateToRegistration(),
         child: const Icon(Icons.add),
       ),
       body: Consumer<ConferenceListViewModel>(
@@ -45,7 +48,9 @@ class _ConferenceListScreenState extends State<ConferenceListScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (viewModel.state == ConferenceListState.error) {
             return Center(
-              child: Text(viewModel.errorMessage ?? 'Erro ao carregar conferências'),
+              child: Text(
+                viewModel.errorMessage ?? 'Erro ao carregar conferências',
+              ),
             );
           } else if (viewModel.conferences.isEmpty) {
             return const Center(child: Text('Nenhuma conferência cadastrada.'));
@@ -61,44 +66,13 @@ class _ConferenceListScreenState extends State<ConferenceListScreen> {
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ConferenceRegistrationScreen(
-                            conferenceToEdit: conference,
-                          ),
-                        ),
-                      ).then((_) {
-                        context.read<ConferenceListViewModel>().loadConferences();
-                      });
+                      _navigateToRegistration(conference: conference);
                     } else if (value == 'delete') {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Confirmar exclusão'),
-                          content: const Text('Deseja realmente excluir esta conferência?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancelar'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ConferenceListViewModel>().deleteConference(conference.id);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Excluir'),
-                            ),
-                          ],
-                        ),
-                      );
+                      _showDeleteDialog(context, viewModel, conference.id);
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar'),
-                    ),
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('Excluir'),
@@ -109,6 +83,33 @@ class _ConferenceListScreenState extends State<ConferenceListScreen> {
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+    BuildContext context,
+    ConferenceListViewModel viewModel,
+    String id,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Deseja realmente excluir esta conferência?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              viewModel.deleteConference(id);
+              Navigator.pop(dialogContext);
+            },
+            child: const Text('Excluir'),
+          ),
+        ],
       ),
     );
   }

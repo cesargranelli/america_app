@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/models/team.dart';
 import '../view_models/team_list_view_model.dart';
 import 'team_registration_screen.dart';
 
@@ -19,24 +20,25 @@ class _TeamListScreenState extends State<TeamListScreen> {
     });
   }
 
+  void _navigateToRegistration({Team? team}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TeamRegistrationScreen(teamToEdit: team),
+      ),
+    ).then((_) {
+      if (mounted) {
+        context.read<TeamListViewModel>().loadTeams();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Times'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Times')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const TeamRegistrationScreen(),
-            ),
-          ).then((_) {
-            context.read<TeamListViewModel>().loadTeams();
-          });
-        },
+        onPressed: () => _navigateToRegistration(),
         child: const Icon(Icons.add),
       ),
       body: Consumer<TeamListViewModel>(
@@ -61,44 +63,13 @@ class _TeamListScreenState extends State<TeamListScreen> {
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TeamRegistrationScreen(
-                            teamToEdit: team,
-                          ),
-                        ),
-                      ).then((_) {
-                        context.read<TeamListViewModel>().loadTeams();
-                      });
+                      _navigateToRegistration(team: team);
                     } else if (value == 'delete') {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Confirmar exclusão'),
-                          content: const Text('Deseja realmente excluir este time?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancelar'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<TeamListViewModel>().deleteTeam(team.id);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Excluir'),
-                            ),
-                          ],
-                        ),
-                      );
+                      _showDeleteDialog(context, viewModel, team.id);
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar'),
-                    ),
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('Excluir'),
@@ -109,6 +80,33 @@ class _TeamListScreenState extends State<TeamListScreen> {
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+    BuildContext context,
+    TeamListViewModel viewModel,
+    String id,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Deseja realmente excluir este time?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              viewModel.deleteTeam(id);
+              Navigator.pop(dialogContext);
+            },
+            child: const Text('Excluir'),
+          ),
+        ],
       ),
     );
   }

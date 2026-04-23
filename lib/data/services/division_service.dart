@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../domain/models/division.dart';
 import '../../ui/core/exceptions/repository_exception.dart';
+import '../../ui/core/utils/app_logger.dart';
 
 abstract class DivisionService {
   Future<Division> register(Division division);
@@ -17,18 +18,26 @@ class DivisionServiceImpl implements DivisionService {
   @override
   Future<Division> register(Division division) async {
     try {
-      return await _dio
-          .post('/organizations/division', data: division.toJson())
-          .then((response) {
-            return Division.fromJson(response.data);
-          }, onError: (error) {});
+      final response = await _dio.post(
+        '/organizations/division',
+        data: division.toJson(),
+      );
+      return Division.fromJson(response.data);
     } on DioException catch (e, s) {
-      print('Erro ao registrar divisão no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro ao registrar divisão no serviço',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(
         message: 'Erro ao registrar a divisão. Por favor, tente novamente.',
       );
     } catch (e, s) {
-      print('Erro inesperado no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro inesperado no serviço de divisão',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(message: 'Ocorreu um erro inesperado.');
     }
   }
@@ -36,13 +45,11 @@ class DivisionServiceImpl implements DivisionService {
   @override
   Future<List<Division>> getAll() async {
     try {
-      return await _dio.get('/organizations/division').then((response) {
-        return (response.data as List)
-            .map((e) => Division.fromJson(e))
-            .toList();
-      });
-    } catch (e) {
-      return [];
+      final response = await _dio.get('/organizations/division');
+      return (response.data as List).map((e) => Division.fromJson(e)).toList();
+    } catch (e, s) {
+      AppLogger.error('Erro ao buscar divisões', error: e, stackTrace: s);
+      throw RepositoryException(message: 'Erro ao buscar divisões.');
     }
   }
 
@@ -53,7 +60,8 @@ class DivisionServiceImpl implements DivisionService {
         '/organizations/division/${division.id}',
         data: division.toJson(),
       );
-    } catch (e) {
+    } catch (e, s) {
+      AppLogger.error('Erro ao atualizar divisão', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao atualizar divisão.');
     }
   }
@@ -62,7 +70,8 @@ class DivisionServiceImpl implements DivisionService {
   Future<void> delete(String id) async {
     try {
       await _dio.delete('/organizations/division/$id');
-    } catch (e) {
+    } catch (e, s) {
+      AppLogger.error('Erro ao deletar divisão', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao deletar divisão.');
     }
   }

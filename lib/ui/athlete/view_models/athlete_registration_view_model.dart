@@ -3,6 +3,7 @@ import '../../../data/repositories/athlete_repository.dart';
 import '../../../data/repositories/team_repository.dart';
 import '../../../domain/models/athlete.dart';
 import '../../../domain/models/team.dart';
+import '../../core/utils/app_logger.dart';
 
 enum AthleteRegistrationState { initial, loading, success, error }
 
@@ -30,7 +31,7 @@ class AthleteRegistrationViewModel extends ChangeNotifier {
       _teams = await _teamRepository.getAllTeams();
       notifyListeners();
     } catch (e) {
-      print('Erro ao carregar times: $e');
+      AppLogger.error('Erro ao carregar times', error: e);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../domain/models/team.dart';
 import '../../ui/core/exceptions/repository_exception.dart';
+import '../../ui/core/utils/app_logger.dart';
 
 abstract class TeamService {
   Future<Team> register(Team team);
@@ -17,18 +18,26 @@ class TeamServiceImpl implements TeamService {
   @override
   Future<Team> register(Team team) async {
     try {
-      return await _dio.post('/organizations/team', data: team.toJson()).then((
-        response,
-      ) {
-        return Team.fromJson(response.data);
-      }, onError: (error) {});
+      final response = await _dio.post(
+        '/organizations/team',
+        data: team.toJson(),
+      );
+      return Team.fromJson(response.data);
     } on DioException catch (e, s) {
-      print('Erro ao registrar time no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro ao registrar time no serviço',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(
         message: 'Erro ao registrar o time. Por favor, tente novamente.',
       );
     } catch (e, s) {
-      print('Erro inesperado no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro inesperado no serviço de time',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(message: 'Ocorreu um erro inesperado.');
     }
   }
@@ -36,11 +45,11 @@ class TeamServiceImpl implements TeamService {
   @override
   Future<List<Team>> getAll() async {
     try {
-      return await _dio.get('/organizations/team').then((response) {
-        return (response.data as List).map((e) => Team.fromJson(e)).toList();
-      });
-    } catch (e) {
-      return [];
+      final response = await _dio.get('/organizations/team');
+      return (response.data as List).map((e) => Team.fromJson(e)).toList();
+    } catch (e, s) {
+      AppLogger.error('Erro ao buscar times', error: e, stackTrace: s);
+      throw RepositoryException(message: 'Erro ao buscar times.');
     }
   }
 
@@ -48,7 +57,8 @@ class TeamServiceImpl implements TeamService {
   Future<void> update(Team team) async {
     try {
       await _dio.put('/organizations/team/${team.id}', data: team.toJson());
-    } catch (e) {
+    } catch (e, s) {
+      AppLogger.error('Erro ao atualizar time', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao atualizar time.');
     }
   }
@@ -57,7 +67,8 @@ class TeamServiceImpl implements TeamService {
   Future<void> delete(String id) async {
     try {
       await _dio.delete('/organizations/team/$id');
-    } catch (e) {
+    } catch (e, s) {
+      AppLogger.error('Erro ao deletar time', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao deletar time.');
     }
   }

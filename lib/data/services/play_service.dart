@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../domain/models/play.dart';
 import '../../ui/core/exceptions/repository_exception.dart';
+import '../../ui/core/utils/app_logger.dart';
 
 abstract class PlayService {
   Future<Play> register(Play play);
@@ -15,18 +16,26 @@ class PlayServiceImpl implements PlayService {
   @override
   Future<Play> register(Play play) async {
     try {
-      return await _dio
-          .post('/games/${play.gameId}/plays', data: play.toJson())
-          .then((response) {
-            return Play.fromJson(response.data);
-          }, onError: (error) {});
+      final response = await _dio.post(
+        '/games/${play.gameId}/plays',
+        data: play.toJson(),
+      );
+      return Play.fromJson(response.data);
     } on DioException catch (e, s) {
-      print('Erro ao registrar jogada no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro ao registrar jogada no serviço',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(
         message: 'Erro ao registrar a jogada. Por favor, tente novamente.',
       );
     } catch (e, s) {
-      print('Erro inesperado no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro inesperado no serviço de jogada',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(message: 'Ocorreu um erro inesperado.');
     }
   }
@@ -34,11 +43,11 @@ class PlayServiceImpl implements PlayService {
   @override
   Future<List<Play>> getPlaysByGameId(String gameId) async {
     try {
-      return await _dio.get('/games/$gameId/plays').then((response) {
-        return (response.data as List).map((e) => Play.fromJson(e)).toList();
-      });
-    } catch (e) {
-      return [];
+      final response = await _dio.get('/games/$gameId/plays');
+      return (response.data as List).map((e) => Play.fromJson(e)).toList();
+    } catch (e, s) {
+      AppLogger.error('Erro ao buscar jogadas', error: e, stackTrace: s);
+      throw RepositoryException(message: 'Erro ao buscar jogadas.');
     }
   }
 }

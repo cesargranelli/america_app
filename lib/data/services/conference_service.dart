@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../domain/models/conference.dart';
 import '../../ui/core/exceptions/repository_exception.dart';
+import '../../ui/core/utils/app_logger.dart';
 
 abstract class ConferenceService {
   Future<Conference> register(Conference conference);
@@ -17,18 +18,26 @@ class ConferenceServiceImpl implements ConferenceService {
   @override
   Future<Conference> register(Conference conference) async {
     try {
-      return await _dio
-          .post('/organizations/conference', data: conference.toJson())
-          .then((response) {
-            return Conference.fromJson(response.data);
-          }, onError: (error) {});
+      final response = await _dio.post(
+        '/organizations/conference',
+        data: conference.toJson(),
+      );
+      return Conference.fromJson(response.data);
     } on DioException catch (e, s) {
-      print('Erro ao registrar conferência no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro ao registrar conferência no serviço',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(
         message: 'Erro ao registrar a conferência. Por favor, tente novamente.',
       );
     } catch (e, s) {
-      print('Erro inesperado no serviço: $e, stack: $s');
+      AppLogger.error(
+        'Erro inesperado no serviço de conferência',
+        error: e,
+        stackTrace: s,
+      );
       throw RepositoryException(message: 'Ocorreu um erro inesperado.');
     }
   }
@@ -36,13 +45,13 @@ class ConferenceServiceImpl implements ConferenceService {
   @override
   Future<List<Conference>> getAll() async {
     try {
-      return await _dio.get('/organizations/conference').then((response) {
-        return (response.data as List)
-            .map((e) => Conference.fromJson(e))
-            .toList();
-      });
-    } catch (e) {
-      return [];
+      final response = await _dio.get('/organizations/conference');
+      return (response.data as List)
+          .map((e) => Conference.fromJson(e))
+          .toList();
+    } catch (e, s) {
+      AppLogger.error('Erro ao buscar conferências', error: e, stackTrace: s);
+      throw RepositoryException(message: 'Erro ao buscar conferências.');
     }
   }
 
@@ -53,7 +62,8 @@ class ConferenceServiceImpl implements ConferenceService {
         '/organizations/conference/${conference.id}',
         data: conference.toJson(),
       );
-    } catch (e) {
+    } catch (e, s) {
+      AppLogger.error('Erro ao atualizar conferência', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao atualizar conferência.');
     }
   }
@@ -62,7 +72,8 @@ class ConferenceServiceImpl implements ConferenceService {
   Future<void> delete(String id) async {
     try {
       await _dio.delete('/organizations/conference/$id');
-    } catch (e) {
+    } catch (e, s) {
+      AppLogger.error('Erro ao deletar conferência', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao deletar conferência.');
     }
   }

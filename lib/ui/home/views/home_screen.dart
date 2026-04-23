@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../athlete/views/athlete_list_screen.dart';
 import '../../auth/view_models/auth_view_model.dart';
-import '../../auth/views/login_screen.dart';
-import '../../championship/views/championship_list_screen.dart';
-import '../../conference/views/conference_list_screen.dart';
-import '../../division/views/division_list_screen.dart';
-import '../../league/views/league_registration_screen.dart';
-import '../../standings/views/standings_screen.dart';
-import '../../team/views/team_list_screen.dart';
+import '../../core/routing/app_router.dart';
+import '../../core/theme/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -26,9 +21,7 @@ class HomeScreen extends StatelessWidget {
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
               authViewModel.signOut();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
+              context.go(AppRoutes.login);
             },
           ),
         ],
@@ -37,9 +30,9 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Color(0xFFFAC638)),
-              child: Text(
+            DrawerHeader(
+              decoration: const BoxDecoration(color: AppColors.primary),
+              child: const Text(
                 'Menu',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
@@ -49,12 +42,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Ligas'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LeagueRegistrationScreen(),
-                  ),
-                );
+                context.push(AppRoutes.leagueRegistration);
               },
             ),
             ListTile(
@@ -62,12 +50,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Campeonatos'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChampionshipListScreen(),
-                  ),
-                );
+                context.push(AppRoutes.championships);
               },
             ),
             ListTile(
@@ -75,12 +58,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Conferências'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ConferenceListScreen(),
-                  ),
-                );
+                context.push(AppRoutes.conferences);
               },
             ),
             ListTile(
@@ -88,12 +66,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Divisões'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DivisionListScreen(),
-                  ),
-                );
+                context.push(AppRoutes.divisions);
               },
             ),
             ListTile(
@@ -101,12 +74,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Equipes'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const TeamListScreen(),
-                  ),
-                );
+                context.push(AppRoutes.teams);
               },
             ),
             ListTile(
@@ -114,12 +82,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Atletas'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AthleteListScreen(),
-                  ),
-                );
+                context.push(AppRoutes.athletes);
               },
             ),
             ListTile(
@@ -127,12 +90,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Classificação'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const StandingsScreen(),
-                  ),
-                );
+                context.push(AppRoutes.standings);
               },
             ),
           ],

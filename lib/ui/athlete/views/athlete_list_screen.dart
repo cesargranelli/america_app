@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/models/athlete.dart';
 import '../view_models/athlete_list_view_model.dart';
 import 'athlete_registration_screen.dart';
 
@@ -19,24 +20,25 @@ class _AthleteListScreenState extends State<AthleteListScreen> {
     });
   }
 
+  void _navigateToRegistration({Athlete? athlete}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AthleteRegistrationScreen(athleteToEdit: athlete),
+      ),
+    ).then((_) {
+      if (mounted) {
+        context.read<AthleteListViewModel>().loadAthletes();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Atletas'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Atletas')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AthleteRegistrationScreen(),
-            ),
-          ).then((_) {
-            context.read<AthleteListViewModel>().loadAthletes();
-          });
-        },
+        onPressed: () => _navigateToRegistration(),
         child: const Icon(Icons.add),
       ),
       body: Consumer<AthleteListViewModel>(
@@ -57,48 +59,19 @@ class _AthleteListScreenState extends State<AthleteListScreen> {
               final athlete = viewModel.athletes[index];
               return ListTile(
                 title: Text(athlete.name),
-                subtitle: Text('Posição: ${athlete.position} | Time ID: ${athlete.teamId}'),
+                subtitle: Text(
+                  'Posição: ${athlete.position} | Time ID: ${athlete.teamId}',
+                ),
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AthleteRegistrationScreen(
-                            athleteToEdit: athlete,
-                          ),
-                        ),
-                      ).then((_) {
-                        context.read<AthleteListViewModel>().loadAthletes();
-                      });
+                      _navigateToRegistration(athlete: athlete);
                     } else if (value == 'delete') {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Confirmar exclusão'),
-                          content: const Text('Deseja realmente excluir este atleta?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Cancelar'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<AthleteListViewModel>().deleteAthlete(athlete.id);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Excluir'),
-                            ),
-                          ],
-                        ),
-                      );
+                      _showDeleteDialog(context, viewModel, athlete.id);
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: Text('Editar'),
-                    ),
+                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                       value: 'delete',
                       child: Text('Excluir'),
@@ -109,6 +82,33 @@ class _AthleteListScreenState extends State<AthleteListScreen> {
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showDeleteDialog(
+    BuildContext context,
+    AthleteListViewModel viewModel,
+    String id,
+  ) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: const Text('Deseja realmente excluir este atleta?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              viewModel.deleteAthlete(id);
+              Navigator.pop(dialogContext);
+            },
+            child: const Text('Excluir'),
+          ),
+        ],
       ),
     );
   }

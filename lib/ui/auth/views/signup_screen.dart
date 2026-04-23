@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../home/views/home_screen.dart';
+import '../../core/routing/app_router.dart';
 import '../view_models/auth_view_model.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
@@ -24,16 +26,46 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
+  String? _validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Por favor, insira o nome';
+    }
+    if (value.trim().length < 2) {
+      return 'O nome deve ter pelo menos 2 caracteres';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Por favor, insira o email';
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value.trim())) {
+      return 'Por favor, insira um email válido';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Por favor, insira a senha';
+    }
+    if (value.trim().length < 6) {
+      return 'A senha deve ter pelo menos 6 caracteres';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<AuthViewModel>();
     final isLoading = viewModel.state == AuthState.loading;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       if (viewModel.state == AuthState.success) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
+        context.go(AppRoutes.home);
       } else if (viewModel.state == AuthState.error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -48,46 +80,52 @@ class _SignupScreenState extends State<SignupScreen> {
       appBar: AppBar(title: const Text('Cadastro')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _nameCtrl,
-              decoration: const InputDecoration(labelText: 'Nome'),
-              enabled: !isLoading,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _emailCtrl,
-              decoration: const InputDecoration(labelText: 'Email'),
-              enabled: !isLoading,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _passwordCtrl,
-              decoration: const InputDecoration(labelText: 'Senha'),
-              obscureText: true,
-              enabled: !isLoading,
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: isLoading
-                  ? null
-                  : () {
-                      viewModel.signUp(
-                        _emailCtrl.text.trim(),
-                        _passwordCtrl.text.trim(),
-                        _nameCtrl.text.trim(),
-                      );
-                    },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: _nameCtrl,
+                decoration: const InputDecoration(labelText: 'Nome'),
+                enabled: !isLoading,
+                validator: _validateName,
               ),
-              child: isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text('Cadastrar'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _emailCtrl,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+                enabled: !isLoading,
+                validator: _validateEmail,
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _passwordCtrl,
+                decoration: const InputDecoration(labelText: 'Senha'),
+                obscureText: true,
+                enabled: !isLoading,
+                validator: _validatePassword,
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        if (_formKey.currentState!.validate()) {
+                          viewModel.signUp(
+                            _emailCtrl.text.trim(),
+                            _passwordCtrl.text.trim(),
+                            _nameCtrl.text.trim(),
+                          );
+                        }
+                      },
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Cadastrar'),
+              ),
+            ],
+          ),
         ),
       ),
     );

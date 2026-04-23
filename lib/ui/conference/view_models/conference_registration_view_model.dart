@@ -3,6 +3,7 @@ import '../../../data/repositories/conference_repository.dart';
 import '../../../data/repositories/championship_repository.dart';
 import '../../../domain/models/conference.dart';
 import '../../../domain/models/championship.dart';
+import '../../core/utils/app_logger.dart';
 
 enum ConferenceRegistrationState { initial, loading, success, error }
 
@@ -30,7 +31,7 @@ class ConferenceRegistrationViewModel extends ChangeNotifier {
       _championships = await _championshipRepository.getAllChampionships();
       notifyListeners();
     } catch (e) {
-      print('Erro ao carregar campeonatos: $e');
+      AppLogger.error('Erro ao carregar campeonatos', error: e);
     }
   }
 
