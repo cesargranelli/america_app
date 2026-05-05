@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
               authViewModel.signOut();
-              context.go(AppRoutes.login);
+              context.go(AppRoutes.signIn);
             },
           ),
         ],
@@ -36,6 +36,14 @@ class HomeScreen extends StatelessWidget {
                 'Menu',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Perfil'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push(AppRoutes.profile);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.emoji_events),

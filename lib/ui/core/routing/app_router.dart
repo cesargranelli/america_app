@@ -1,11 +1,10 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../auth/views/login_screen.dart';
-import '../../auth/views/signup_screen.dart';
-import '../../home/views/home_screen.dart';
 import '../../athlete/views/athlete_list_screen.dart';
 import '../../athlete/views/athlete_registration_screen.dart';
+import '../../auth/views/signup_screen.dart';
 import '../../championship/views/championship_list_screen.dart';
 import '../../championship/views/championship_registration_screen.dart';
 import '../../conference/views/conference_list_screen.dart';
@@ -14,18 +13,19 @@ import '../../division/views/division_list_screen.dart';
 import '../../division/views/division_registration_screen.dart';
 import '../../game/views/game_management_screen.dart';
 import '../../game/views/game_timeline_screen.dart';
+import '../../home/views/home_screen.dart';
 import '../../league/views/league_registration_screen.dart';
 import '../../standings/views/standings_screen.dart';
 import '../../team/views/team_list_screen.dart';
 import '../../team/views/team_registration_screen.dart';
 
-/// Nomes das rotas para navegação type-safe.
 class AppRoutes {
   AppRoutes._();
 
-  static const String login = '/login';
-  static const String signup = '/signup';
-  static const String home = '/';
+  static const String signIn = '/sign-in';
+  static const String signUp = '/sign-up';
+  static const String home = '/home';
+  static const String profile = '/profile';
   static const String leagues = '/leagues';
   static const String leagueRegistration = '/leagues/register';
   static const String championships = '/championships';
@@ -43,22 +43,52 @@ class AppRoutes {
   static const String gameTimeline = '/games/:gameId/timeline';
 }
 
-/// Configuração do GoRouter para a aplicação.
 GoRouter createAppRouter(BuildContext context) {
   return GoRouter(
-    initialLocation: AppRoutes.login,
+    initialLocation: AppRoutes.signIn,
     redirect: (context, state) {
-      // Redirect logic is handled by the auth stream in the shell
       return null;
     },
     routes: [
-      // Auth routes
       GoRoute(
-        path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
+        path: AppRoutes.signIn,
+        builder: (context, state) => SignInScreen(
+          providers: [EmailAuthProvider()],
+          actions: [
+            AuthStateChangeAction<SignedIn>((context, state) {
+              context.go('/home');
+            }),
+          ],
+          headerBuilder: (context, constraints, shrinkOffset) {
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Image.asset('assets/flutterfire_300x.png'),
+              ),
+            );
+          },
+          subtitleBuilder: (context, action) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: action == AuthAction.signIn
+                  ? const Text('Welcome to FlutterFire, please sign in!')
+                  : const Text('Welcome to Flutterfire, please sign up!'),
+            );
+          },
+          footerBuilder: (context, action) {
+            return const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text(
+                'By signing in, you agree to our terms and conditions.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          },
+        ),
       ),
       GoRoute(
-        path: AppRoutes.signup,
+        path: AppRoutes.signUp,
         builder: (context, state) => const SignupScreen(),
       ),
 
@@ -66,6 +96,12 @@ GoRouter createAppRouter(BuildContext context) {
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),
+      ),
+
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) =>
+            const ProfileScreen(children: [Text('data')]),
       ),
 
       // League routes

@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextButton(
                 onPressed: isLoading
                     ? null
-                    : () => context.push(AppRoutes.signup),
+                    : () => context.push(AppRoutes.signUp),
                 child: const Text('Não tem uma conta? Cadastre-se'),
               ),
             ],

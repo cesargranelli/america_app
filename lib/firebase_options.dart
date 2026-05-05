@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'sevenine-america.firebasestorage.app',
     measurementId: 'G-VZ7VPCJ45N',
   );
+
 }
