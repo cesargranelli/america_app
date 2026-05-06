@@ -1,38 +1,38 @@
-import 'organization.dart';
-
 class League {
-  final int id;
+  final String? id;
   final String name;
   final String acronym;
-  final String code;
-  final Organization organization;
-  final DateTime foundationDate;
-  final DateTime createdDate;
-  final DateTime updatedDate;
+  final String? code;
 
-  League({
-    required this.id,
-    required this.name,
-    required this.acronym,
-    required this.code,
-    required this.organization,
-    required this.foundationDate,
-    required this.createdDate,
-    required this.updatedDate,
-  });
+  League({this.id, required this.name, required this.acronym, this.code});
 
+  /// Constructs a League from a Firestore document.
+  factory League.fromFirestore(String docId, Map<String, dynamic> data) {
+    return League(
+      id: docId,
+      name: data['name'] as String,
+      acronym: data['acronym'] as String,
+      code: data['code'] as String?,
+    );
+  }
+
+  /// Existing fromJson for backward compatibility or testing.
   factory League.fromJson(Map<String, dynamic> json) {
     return League(
-      id: json['id'],
-      name: json['name'],
-      acronym: json['acronym'],
-      code: json['code'],
-
-      organization: Organization.fromJson(json['organization']),
-
-      foundationDate: DateTime.parse(json['foundationDate']),
-      createdDate: DateTime.parse(json['createdDate']),
-      updatedDate: DateTime.parse(json['updatedDate']),
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      acronym: json['acronym'] as String,
+      code: json['code'] as String?,
     );
+  }
+
+  /// Serializes to a Map for Firestore document data.
+  /// Excludes `id` because Firestore manages document IDs separately.
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{'name': name, 'acronym': acronym};
+    if (code != null) {
+      map['code'] = code;
+    }
+    return map;
   }
 }

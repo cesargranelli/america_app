@@ -1,3 +1,4 @@
+import 'package:america_app/domain/models/league.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,23 +7,30 @@ import '../view_models/league_registration_view_model.dart';
 
 class LeagueRegistrationScreen extends StatelessWidget {
   final LeagueRegistrationViewModel? viewModel;
+  final League? leagueToEdit;
 
-  const LeagueRegistrationScreen({super.key, this.viewModel});
+  const LeagueRegistrationScreen({
+    super.key,
+    this.viewModel,
+    this.leagueToEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (viewModel != null) {
       return ChangeNotifierProvider.value(
         value: viewModel!,
-        child: const _LeagueRegistrationView(),
+        child: _LeagueRegistrationView(leagueToEdit: leagueToEdit),
       );
     }
-    return const _LeagueRegistrationView();
+    return _LeagueRegistrationView(leagueToEdit: leagueToEdit);
   }
 }
 
 class _LeagueRegistrationView extends StatefulWidget {
-  const _LeagueRegistrationView();
+  final League? leagueToEdit;
+
+  const _LeagueRegistrationView({this.leagueToEdit});
 
   @override
   State<_LeagueRegistrationView> createState() =>
@@ -39,6 +47,11 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
     super.initState();
     final viewModel = context.read<LeagueRegistrationViewModel>();
     viewModel.addListener(_onViewModelStateChanged);
+
+    if (widget.leagueToEdit != null) {
+      _nameCtrl.text = widget.leagueToEdit!.name;
+      _acronymCtrl.text = widget.leagueToEdit!.acronym;
+    }
   }
 
   void _onViewModelStateChanged() {
@@ -110,7 +123,9 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Cadastro da Liga'),
+            title: Text(
+              widget.leagueToEdit != null ? 'Editar Liga' : 'Cadastro da Liga',
+            ),
             centerTitle: true,
             elevation: 0.0,
           ),
@@ -170,16 +185,27 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
               onPressed: isLoading
                   ? null
                   : () {
-                      viewModel.registerLeague(
-                        name: _nameCtrl.text,
-                        acronym: _acronymCtrl.text,
-                        foundationDate: _foundationDateCrtl.text,
-                      );
+                      if (widget.leagueToEdit != null) {
+                        viewModel.updateLeague(
+                          id: widget.leagueToEdit!.id!,
+                          name: _nameCtrl.text,
+                          acronym: _acronymCtrl.text,
+                          foundationDate: _foundationDateCrtl.text,
+                        );
+                      } else {
+                        viewModel.registerLeague(
+                          name: _nameCtrl.text,
+                          acronym: _acronymCtrl.text,
+                          foundationDate: _foundationDateCrtl.text,
+                        );
+                      }
                     },
               style: ElevatedButton.styleFrom(),
               child: isLoading
                   ? const CircularProgressIndicator(color: Color(0xFF4A4A4A))
-                  : const Text('Registrar'),
+                  : Text(
+                      widget.leagueToEdit != null ? 'Atualizar' : 'Registrar',
+                    ),
             ),
           ),
         );

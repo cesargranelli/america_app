@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Ligas'),
               onTap: () {
                 Navigator.pop(context);
-                context.push(AppRoutes.leagueRegistration);
+                context.push(AppRoutes.leagues);
               },
             ),
             ListTile(

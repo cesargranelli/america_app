@@ -1,3 +1,4 @@
+import 'package:america_app/ui/league/view_models/league_list_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -58,15 +59,18 @@ class AppProviders {
     ),
 
     // League
-    Provider<LeagueService>(
-      create: (context) => LeagueServiceImpl(dio: context.read<Dio>()),
-    ),
+    Provider<LeagueService>(create: (context) => LeagueServiceImpl()),
     Provider<LeagueRepository>(
       create: (context) =>
           LeagueRepositoryImpl(leagueService: context.read<LeagueService>()),
     ),
     ChangeNotifierProvider<LeagueRegistrationViewModel>(
       create: (context) => LeagueRegistrationViewModel(
+        leagueRepository: context.read<LeagueRepository>(),
+      ),
+    ),
+    ChangeNotifierProvider<LeagueListViewModel>(
+      create: (context) => LeagueListViewModel(
         leagueRepository: context.read<LeagueRepository>(),
       ),
     ),

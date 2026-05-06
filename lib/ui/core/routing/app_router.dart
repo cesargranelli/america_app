@@ -14,6 +14,7 @@ import '../../division/views/division_registration_screen.dart';
 import '../../game/views/game_management_screen.dart';
 import '../../game/views/game_timeline_screen.dart';
 import '../../home/views/home_screen.dart';
+import '../../league/views/league_list_screen.dart';
 import '../../league/views/league_registration_screen.dart';
 import '../../standings/views/standings_screen.dart';
 import '../../team/views/team_list_screen.dart';
@@ -45,7 +46,7 @@ class AppRoutes {
 
 GoRouter createAppRouter(BuildContext context) {
   return GoRouter(
-    initialLocation: AppRoutes.signIn,
+    initialLocation: AppRoutes.leagues,
     redirect: (context, state) {
       return null;
     },
@@ -105,6 +106,10 @@ GoRouter createAppRouter(BuildContext context) {
       ),
 
       // League routes
+      GoRoute(
+        path: AppRoutes.leagues,
+        builder: (context, state) => const LeagueListScreen(),
+      ),
       GoRoute(
         path: AppRoutes.leagueRegistration,
         builder: (context, state) => const LeagueRegistrationScreen(),
