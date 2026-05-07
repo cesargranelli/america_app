@@ -27,7 +27,6 @@ class LeagueRegistrationViewModel with ChangeNotifier {
     _updateState(LeagueRegistrationState.loading);
 
     try {
-      // 1. Validação dos dados de entrada
       if (name.isEmpty || acronym.isEmpty || foundationDate.isEmpty) {
         throw Exception('Todos os campos são obrigatórios.');
       }
@@ -37,7 +36,11 @@ class LeagueRegistrationViewModel with ChangeNotifier {
         throw Exception('Formato de data inválido. Use DD/MM/AAAA.');
       }
 
-      final league = League(name: name, acronym: acronym);
+      final league = League(
+        name: name,
+        acronym: acronym,
+        foundationDate: foundationDate,
+      );
 
       await _leagueRepository.registerLeague(league);
 
@@ -66,7 +69,12 @@ class LeagueRegistrationViewModel with ChangeNotifier {
         throw Exception('Formato de data inválido. Use DD/MM/AAAA.');
       }
 
-      final league = League(id: id, name: name, acronym: acronym);
+      final league = League(
+        id: id,
+        name: name,
+        acronym: acronym,
+        foundationDate: foundationDate,
+      );
 
       await _leagueRepository.updateLeague(league);
 

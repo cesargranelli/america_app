@@ -51,6 +51,7 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
     if (widget.leagueToEdit != null) {
       _nameCtrl.text = widget.leagueToEdit!.name;
       _acronymCtrl.text = widget.leagueToEdit!.acronym;
+      _foundationDateCrtl.text = widget.leagueToEdit!.foundationDate;
     }
   }
 
@@ -141,8 +142,7 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
                       labelText: 'Nome',
                       hintText: 'Digite o nome da liga',
                     ),
-                    enabled:
-                        !isLoading, // Desabilita campos durante o carregamento
+                    enabled: !isLoading,
                   ),
                   const SizedBox(height: 20.0),
                   TextField(

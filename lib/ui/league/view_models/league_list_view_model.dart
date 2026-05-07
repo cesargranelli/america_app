@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../data/repositories/league_repository.dart';
 import '../../../domain/models/league.dart';
 
@@ -11,12 +12,15 @@ class LeagueListViewModel extends ChangeNotifier {
     : _leagueRepository = leagueRepository;
 
   LeagueListState _state = LeagueListState.initial;
+
   LeagueListState get state => _state;
 
   List<League> _leagues = [];
+
   List<League> get leagues => _leagues;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   Future<void> loadLeagues() async {

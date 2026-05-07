@@ -58,9 +58,10 @@ class _LeagueListScreenState extends State<LeagueListScreen> {
             itemCount: viewModel.leagues.length,
             itemBuilder: (context, index) {
               final league = viewModel.leagues[index];
+
               return ListTile(
                 title: Text(league.name),
-                subtitle: Text('${league.acronym} - ${league.code}'),
+                subtitle: Text('${league.acronym} - ${league.foundationDate}'),
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {

@@ -2,37 +2,40 @@ class League {
   final String? id;
   final String name;
   final String acronym;
-  final String? code;
+  final String foundationDate;
 
-  League({this.id, required this.name, required this.acronym, this.code});
+  League({
+    this.id,
+    required this.name,
+    required this.acronym,
+    required this.foundationDate,
+  });
 
-  /// Constructs a League from a Firestore document.
   factory League.fromFirestore(String docId, Map<String, dynamic> data) {
     return League(
       id: docId,
       name: data['name'] as String,
       acronym: data['acronym'] as String,
-      code: data['code'] as String?,
+      foundationDate: data['foundationDate'] as String,
     );
   }
 
-  /// Existing fromJson for backward compatibility or testing.
   factory League.fromJson(Map<String, dynamic> json) {
     return League(
       id: json['id'] as String?,
       name: json['name'] as String,
       acronym: json['acronym'] as String,
-      code: json['code'] as String?,
+      foundationDate: json['foundationDate'] as String,
     );
   }
 
-  /// Serializes to a Map for Firestore document data.
-  /// Excludes `id` because Firestore manages document IDs separately.
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{'name': name, 'acronym': acronym};
-    if (code != null) {
-      map['code'] = code;
-    }
+    final map = <String, dynamic>{
+      'name': name,
+      'acronym': acronym,
+      'foundationDate': foundationDate,
+    };
+
     return map;
   }
 }

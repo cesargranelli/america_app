@@ -31,7 +31,7 @@ class LeagueServiceImpl implements LeagueService {
         id: docRef.id,
         name: league.name,
         acronym: league.acronym,
-        code: league.code,
+        foundationDate: league.foundationDate,
       );
     } on FirebaseException catch (e, s) {
       AppLogger.error(
