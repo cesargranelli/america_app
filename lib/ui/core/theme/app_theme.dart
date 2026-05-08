@@ -1,69 +1,30 @@
 import 'package:flutter/material.dart';
 
-/// Cores centralizadas do America App.
+/// Cores centralizadas do America App (baseado no FlutterTemplates.dev).
 class AppColors {
   AppColors._();
 
-  static const Color primary = Color(0xFFFAC638);
-  static const Color onPrimary = Color(0xFF4A4A4A);
+  static const Color primary = Colors.deepPurple;
+  static const Color onPrimary = Colors.white;
   static const Color surface = Colors.white;
-  static const Color onSurface = Color(0xFF4A4A4A);
+  static const Color onSurface = Color(0xFF1C1B1F);
   static const Color error = Colors.red;
-  static const Color accent = Color(0xFF9E8747);
+  static const Color accent = Colors.deepPurpleAccent;
 }
 
-/// Tema centralizado do America App.
+/// Tema centralizado do America App (FlutterTemplates.dev style).
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get light {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
-      onPrimary: AppColors.onPrimary,
-      surface: AppColors.surface,
-      onSurface: AppColors.onSurface,
-      error: AppColors.error,
-    );
+  static ThemeData get light => ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+  );
 
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: colorScheme,
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.onPrimary,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
-          minimumSize: const Size(double.infinity, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14.0),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.onPrimary,
-      ),
-      drawerTheme: const DrawerThemeData(backgroundColor: AppColors.surface),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-      ),
-      snackBarTheme: const SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
+  static ThemeData get dark => ThemeData.dark(useMaterial3: true).copyWith(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.deepPurple,
+      brightness: Brightness.dark,
+    ),
+  );
 }

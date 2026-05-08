@@ -20,6 +20,7 @@ class AmericaApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'App America',
             theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
             routerConfig: router,
           );
         },

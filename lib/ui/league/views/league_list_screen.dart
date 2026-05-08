@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../domain/models/league.dart';
 import '../view_models/league_list_view_model.dart';
 import 'league_registration_screen.dart';
 import 'league_screen.dart';
@@ -22,27 +21,12 @@ class _LeagueListScreenState extends State<LeagueListScreen> {
     });
   }
 
-  void _navigateToRegistration({League? league}) {
+  void _navigateToRegistration() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => LeagueRegistrationScreen(leagueToEdit: league),
-      ),
+      MaterialPageRoute(builder: (context) => const LeagueRegistrationScreen()),
     ).then((_) {
-      if (mounted) {
-        context.read<LeagueListViewModel>().loadLeagues();
-      }
-    });
-  }
-
-  void _navigateToLeague({required League league}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LeagueScreen(league: league)),
-    ).then((_) {
-      if (mounted) {
-        context.read<LeagueListViewModel>().loadLeagues();
-      }
+      if (mounted) context.read<LeagueListViewModel>().loadLeagues();
     });
   }
 
@@ -51,7 +35,7 @@ class _LeagueListScreenState extends State<LeagueListScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Ligas')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _navigateToRegistration(),
+        onPressed: _navigateToRegistration,
         child: const Icon(Icons.add),
       ),
       body: Consumer<LeagueListViewModel>(
@@ -70,59 +54,34 @@ class _LeagueListScreenState extends State<LeagueListScreen> {
             itemCount: viewModel.leagues.length,
             itemBuilder: (context, index) {
               final league = viewModel.leagues[index];
-
               return ListTile(
-                title: Text(league.acronym),
-                trailing: PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'league') {
-                      _navigateToLeague(league: league);
-                    } else if (value == 'edit') {
-                      _navigateToRegistration(league: league);
-                    } else if (value == 'delete') {
-                      _showDeleteDialog(context, viewModel, league.id!);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'league', child: Text('Liga')),
-                    const PopupMenuItem(value: 'edit', child: Text('Editar')),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Text('Excluir'),
+                minTileHeight: 80,
+                leading: Hero(
+                  tag: 'league_hero_${league.id}',
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.deepPurple.withValues(alpha: 0.1),
                     ),
-                  ],
+                    child: const Icon(Icons.emoji_events, color: Colors.deepPurple),
+                  ),
                 ),
+                title: Text(league.name),
+                subtitle: Text(league.acronym),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LeagueScreen(league: league)),
+                  ).then((_) {
+                    if (mounted) context.read<LeagueListViewModel>().loadLeagues();
+                  });
+                },
               );
             },
           );
         },
-      ),
-    );
-  }
-
-  void _showDeleteDialog(
-    BuildContext context,
-    LeagueListViewModel viewModel,
-    String id,
-  ) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Confirmar exclusão'),
-        content: const Text('Deseja realmente excluir esta liga?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () {
-              viewModel.deleteLeague(id);
-              Navigator.pop(dialogContext);
-            },
-            child: const Text('Excluir'),
-          ),
-        ],
       ),
     );
   }

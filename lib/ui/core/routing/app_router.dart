@@ -46,7 +46,7 @@ class AppRoutes {
 
 GoRouter createAppRouter(BuildContext context) {
   return GoRouter(
-    initialLocation: AppRoutes.leagues,
+    initialLocation: AppRoutes.home,
     redirect: (context, state) {
       return null;
     },

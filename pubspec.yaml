@@ -24,6 +24,7 @@ dependencies:
   dio: ^5.4.3
   logger: ^2.7.0
   go_router: ^17.2.2
+  salomon_bottom_bar: ^3.3.2
 
 dev_dependencies:
   flutter_test:
