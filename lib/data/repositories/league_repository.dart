@@ -10,6 +10,8 @@ abstract class LeagueRepository {
   Future<void> updateLeague(League league);
 
   Future<void> deleteLeague(String id);
+
+  Future<League> getLeague(String id);
 }
 
 class LeagueRepositoryImpl implements LeagueRepository {
@@ -55,6 +57,15 @@ class LeagueRepositoryImpl implements LeagueRepository {
       await _leagueService.delete(id);
     } catch (e) {
       throw RepositoryException(message: 'Erro ao deletar liga.');
+    }
+  }
+
+  @override
+  Future<League> getLeague(String id) async {
+    try {
+      return await _leagueService.get(id);
+    } catch (e) {
+      throw RepositoryException(message: 'Erro ao consultar liga.');
     }
   }
 }

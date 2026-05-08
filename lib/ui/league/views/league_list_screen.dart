@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../domain/models/league.dart';
 import '../view_models/league_list_view_model.dart';
 import 'league_registration_screen.dart';
+import 'league_screen.dart';
 
 class LeagueListScreen extends StatefulWidget {
   const LeagueListScreen({super.key});
@@ -27,6 +28,17 @@ class _LeagueListScreenState extends State<LeagueListScreen> {
       MaterialPageRoute(
         builder: (context) => LeagueRegistrationScreen(leagueToEdit: league),
       ),
+    ).then((_) {
+      if (mounted) {
+        context.read<LeagueListViewModel>().loadLeagues();
+      }
+    });
+  }
+
+  void _navigateToLeague({required League league}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LeagueScreen(league: league)),
     ).then((_) {
       if (mounted) {
         context.read<LeagueListViewModel>().loadLeagues();
@@ -60,17 +72,19 @@ class _LeagueListScreenState extends State<LeagueListScreen> {
               final league = viewModel.leagues[index];
 
               return ListTile(
-                title: Text(league.name),
-                subtitle: Text('${league.acronym} - ${league.foundationDate}'),
+                title: Text(league.acronym),
                 trailing: PopupMenuButton<String>(
                   onSelected: (value) {
-                    if (value == 'edit') {
+                    if (value == 'league') {
+                      _navigateToLeague(league: league);
+                    } else if (value == 'edit') {
                       _navigateToRegistration(league: league);
                     } else if (value == 'delete') {
                       _showDeleteDialog(context, viewModel, league.id!);
                     }
                   },
                   itemBuilder: (context) => [
+                    const PopupMenuItem(value: 'league', child: Text('Liga')),
                     const PopupMenuItem(value: 'edit', child: Text('Editar')),
                     const PopupMenuItem(
                       value: 'delete',

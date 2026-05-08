@@ -11,10 +11,10 @@ class League {
     required this.foundationDate,
   });
 
-  factory League.fromFirestore(String docId, Map<String, dynamic> data) {
+  factory League.fromFirestore(String docId, Map<String, dynamic>? data) {
     return League(
       id: docId,
-      name: data['name'] as String,
+      name: data!['name'] as String,
       acronym: data['acronym'] as String,
       foundationDate: data['foundationDate'] as String,
     );

@@ -12,6 +12,8 @@ abstract class LeagueService {
   Future<void> update(League league);
 
   Future<void> delete(String id);
+
+  Future<League> get(String id);
 }
 
 class LeagueServiceImpl implements LeagueService {
@@ -99,6 +101,24 @@ class LeagueServiceImpl implements LeagueService {
     } catch (e, s) {
       AppLogger.error(
         'Erro inesperado ao deletar liga',
+        error: e,
+        stackTrace: s,
+      );
+      throw RepositoryException(message: 'Ocorreu um erro inesperado.');
+    }
+  }
+
+  @override
+  Future<League> get(String id) async {
+    try {
+      final document = await _leaguesCollection.doc(id).get();
+      return League.fromFirestore(document.id, document.data());
+    } on FirebaseException catch (e, s) {
+      AppLogger.error('Erro ao buscar liga', error: e, stackTrace: s);
+      throw RepositoryException(message: 'Erro ao buscar liga.');
+    } catch (e, s) {
+      AppLogger.error(
+        'Erro inesperado ao buscar liga',
         error: e,
         stackTrace: s,
       );
