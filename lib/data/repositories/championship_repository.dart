@@ -1,11 +1,17 @@
 import '../../domain/models/championship.dart';
-import '../services/championship_service.dart';
+import '../../domain/models/league.dart';
 import '../../ui/core/exceptions/repository_exception.dart';
+import '../services/championship_service.dart';
 
 abstract class ChampionshipRepository {
   Future<Championship> registerChampionship(Championship championship);
+
   Future<List<Championship>> getAllChampionships();
+
+  Future<List<Championship>> getChampionships(League league);
+
   Future<void> updateChampionship(Championship championship);
+
   Future<void> deleteChampionship(String id);
 }
 
@@ -32,6 +38,15 @@ class ChampionshipRepositoryImpl implements ChampionshipRepository {
   Future<List<Championship>> getAllChampionships() async {
     try {
       return await _championshipService.getAll();
+    } catch (e) {
+      throw RepositoryException(message: 'Erro ao buscar campeonatos.');
+    }
+  }
+
+  @override
+  Future<List<Championship>> getChampionships(League league) async {
+    try {
+      return await _championshipService.getChampionships(league);
     } catch (e) {
       throw RepositoryException(message: 'Erro ao buscar campeonatos.');
     }

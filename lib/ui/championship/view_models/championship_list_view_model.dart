@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../data/repositories/championship_repository.dart';
 import '../../../domain/models/championship.dart';
 
@@ -12,12 +13,15 @@ class ChampionshipListViewModel extends ChangeNotifier {
   }) : _championshipRepository = championshipRepository;
 
   ChampionshipListState _state = ChampionshipListState.initial;
+
   ChampionshipListState get state => _state;
 
   List<Championship> _championships = [];
+
   List<Championship> get championships => _championships;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
   Future<void> loadChampionships() async {

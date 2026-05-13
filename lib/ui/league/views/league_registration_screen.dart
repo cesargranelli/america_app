@@ -63,6 +63,8 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Liga registrada com sucesso!')),
       );
+
+      Navigator.of(context).pop();
     } else if (state == LeagueRegistrationState.error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -187,7 +189,7 @@ class _LeagueRegistrationViewState extends State<_LeagueRegistrationView> {
                   : () {
                       if (widget.leagueToEdit != null) {
                         viewModel.updateLeague(
-                          id: widget.leagueToEdit!.id!,
+                          id: widget.leagueToEdit!.id,
                           name: _nameCtrl.text,
                           acronym: _acronymCtrl.text,
                           foundationDate: _foundationDateCrtl.text,

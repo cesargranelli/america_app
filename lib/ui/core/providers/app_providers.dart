@@ -1,4 +1,3 @@
-import 'package:america_app/ui/league/view_models/league_list_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -30,18 +29,19 @@ import '../../conference/view_models/conference_list_view_model.dart';
 import '../../conference/view_models/conference_registration_view_model.dart';
 import '../../division/view_models/division_list_view_model.dart';
 import '../../division/view_models/division_registration_view_model.dart';
+import '../../league/view_models/league_list_view_model.dart';
 import '../../league/view_models/league_registration_view_model.dart';
+import '../../league/view_models/league_view_model.dart';
 import '../../team/view_models/team_list_view_model.dart';
 import '../../team/view_models/team_registration_view_model.dart';
 import '../config/app_config.dart';
 
-/// Providers centralizados da aplicação.
-///
-/// Extraídos do main.dart para manter o entry point limpo.
 class AppProviders {
   AppProviders._();
 
   static List<SingleChildWidget> get all => [
+    // Providers
+
     // Core
     Provider<Dio>(
       create: (_) => Dio(BaseOptions(baseUrl: AppConfig.apiBaseUrl)),
@@ -53,10 +53,6 @@ class AppProviders {
       create: (context) =>
           AuthRepositoryImpl(authService: context.read<AuthService>()),
     ),
-    ChangeNotifierProvider<AuthViewModel>(
-      create: (context) =>
-          AuthViewModel(authRepository: context.read<AuthRepository>()),
-    ),
 
     // League
     Provider<LeagueService>(create: (context) => LeagueServiceImpl()),
@@ -64,34 +60,14 @@ class AppProviders {
       create: (context) =>
           LeagueRepositoryImpl(leagueService: context.read<LeagueService>()),
     ),
-    ChangeNotifierProvider<LeagueRegistrationViewModel>(
-      create: (context) => LeagueRegistrationViewModel(
-        leagueRepository: context.read<LeagueRepository>(),
-      ),
-    ),
-    ChangeNotifierProvider<LeagueListViewModel>(
-      create: (context) => LeagueListViewModel(
-        leagueRepository: context.read<LeagueRepository>(),
-      ),
-    ),
 
     // Championship
     Provider<ChampionshipService>(
-      create: (context) => ChampionshipServiceImpl(dio: context.read<Dio>()),
+      create: (context) => ChampionshipServiceImpl(),
     ),
     Provider<ChampionshipRepository>(
       create: (context) => ChampionshipRepositoryImpl(
         championshipService: context.read<ChampionshipService>(),
-      ),
-    ),
-    ChangeNotifierProvider<ChampionshipRegistrationViewModel>(
-      create: (context) => ChampionshipRegistrationViewModel(
-        championshipRepository: context.read<ChampionshipRepository>(),
-      ),
-    ),
-    ChangeNotifierProvider<ChampionshipListViewModel>(
-      create: (context) => ChampionshipListViewModel(
-        championshipRepository: context.read<ChampionshipRepository>(),
       ),
     ),
 
@@ -104,6 +80,64 @@ class AppProviders {
         conferenceService: context.read<ConferenceService>(),
       ),
     ),
+
+    // Division
+    Provider<DivisionService>(
+      create: (context) => DivisionServiceImpl(dio: context.read<Dio>()),
+    ),
+    Provider<DivisionRepository>(
+      create: (context) => DivisionRepositoryImpl(
+        divisionService: context.read<DivisionService>(),
+      ),
+    ),
+
+    // Team
+    Provider<TeamService>(
+      create: (context) => TeamServiceImpl(dio: context.read<Dio>()),
+    ),
+    Provider<TeamRepository>(
+      create: (context) =>
+          TeamRepositoryImpl(teamService: context.read<TeamService>()),
+    ),
+
+    // Notifiers
+
+    // Auth
+    ChangeNotifierProvider<AuthViewModel>(
+      create: (context) =>
+          AuthViewModel(authRepository: context.read<AuthRepository>()),
+    ),
+
+    // League
+    ChangeNotifierProvider<LeagueRegistrationViewModel>(
+      create: (context) => LeagueRegistrationViewModel(
+        leagueRepository: context.read<LeagueRepository>(),
+      ),
+    ),
+    ChangeNotifierProvider<LeagueListViewModel>(
+      create: (context) => LeagueListViewModel(
+        leagueRepository: context.read<LeagueRepository>(),
+      ),
+    ),
+    ChangeNotifierProvider<LeagueViewModel>(
+      create: (context) => LeagueViewModel(
+        championshipRepository: context.read<ChampionshipRepository>(),
+      ),
+    ),
+
+    // Championship
+    ChangeNotifierProvider<ChampionshipRegistrationViewModel>(
+      create: (context) => ChampionshipRegistrationViewModel(
+        championshipRepository: context.read<ChampionshipRepository>(),
+      ),
+    ),
+    ChangeNotifierProvider<ChampionshipListViewModel>(
+      create: (context) => ChampionshipListViewModel(
+        championshipRepository: context.read<ChampionshipRepository>(),
+      ),
+    ),
+
+    // Conference
     ChangeNotifierProvider<ConferenceRegistrationViewModel>(
       create: (context) => ConferenceRegistrationViewModel(
         conferenceRepository: context.read<ConferenceRepository>(),
@@ -117,14 +151,6 @@ class AppProviders {
     ),
 
     // Division
-    Provider<DivisionService>(
-      create: (context) => DivisionServiceImpl(dio: context.read<Dio>()),
-    ),
-    Provider<DivisionRepository>(
-      create: (context) => DivisionRepositoryImpl(
-        divisionService: context.read<DivisionService>(),
-      ),
-    ),
     ChangeNotifierProvider<DivisionRegistrationViewModel>(
       create: (context) => DivisionRegistrationViewModel(
         divisionRepository: context.read<DivisionRepository>(),
@@ -138,13 +164,6 @@ class AppProviders {
     ),
 
     // Team
-    Provider<TeamService>(
-      create: (context) => TeamServiceImpl(dio: context.read<Dio>()),
-    ),
-    Provider<TeamRepository>(
-      create: (context) =>
-          TeamRepositoryImpl(teamService: context.read<TeamService>()),
-    ),
     ChangeNotifierProvider<TeamRegistrationViewModel>(
       create: (context) => TeamRegistrationViewModel(
         teamRepository: context.read<TeamRepository>(),

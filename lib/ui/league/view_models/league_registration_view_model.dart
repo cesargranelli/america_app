@@ -37,6 +37,7 @@ class LeagueRegistrationViewModel with ChangeNotifier {
       }
 
       final league = League(
+        id: '',
         name: name,
         acronym: acronym,
         foundationDate: foundationDate,

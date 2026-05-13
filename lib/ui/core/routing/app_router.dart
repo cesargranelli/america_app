@@ -2,6 +2,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../domain/models/league.dart';
 import '../../athlete/views/athlete_list_screen.dart';
 import '../../athlete/views/athlete_registration_screen.dart';
 import '../../auth/views/signup_screen.dart';
