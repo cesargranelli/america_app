@@ -1,8 +1,8 @@
-import 'package:america_app/ui/championship/views/championship_registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/models/league.dart';
+import '../../championship/views/championship_registration_screen.dart';
 import '../../championship/views/championship_screen.dart';
 import '../view_models/league_view_model.dart';
 

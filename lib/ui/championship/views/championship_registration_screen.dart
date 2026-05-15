@@ -158,7 +158,6 @@ class _ChampionshipRegistrationViewState
               ),
             );
           });
-
           Navigator.of(context).pop();
         } else if (viewModel.state == ChampionshipRegistrationState.error) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -169,6 +168,7 @@ class _ChampionshipRegistrationViewState
               ),
             );
           });
+          Navigator.of(context).pop();
         }
 
         return Scaffold(
